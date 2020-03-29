@@ -1394,6 +1394,17 @@ export type GetAllQuotesQuery = (
   )>>> }
 );
 
+export type GetAllShowsQueryVariables = {};
+
+
+export type GetAllShowsQuery = (
+  { __typename?: 'Query' }
+  & { showMany?: Maybe<Array<Maybe<(
+    { __typename?: 'Show' }
+    & Pick<Show, 'name' | '_id'>
+  )>>> }
+);
+
 
 export const GetAllQuotesDocument = gql`
     query getAllQuotes {
@@ -1432,3 +1443,36 @@ export function useGetAllQuotesLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type GetAllQuotesQueryHookResult = ReturnType<typeof useGetAllQuotesQuery>;
 export type GetAllQuotesLazyQueryHookResult = ReturnType<typeof useGetAllQuotesLazyQuery>;
 export type GetAllQuotesQueryResult = ApolloReactCommon.QueryResult<GetAllQuotesQuery, GetAllQuotesQueryVariables>;
+export const GetAllShowsDocument = gql`
+    query getAllShows {
+  showMany {
+    name
+    _id
+  }
+}
+    `;
+
+/**
+ * __useGetAllShowsQuery__
+ *
+ * To run a query within a React component, call `useGetAllShowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllShowsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllShowsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllShowsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAllShowsQuery, GetAllShowsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetAllShowsQuery, GetAllShowsQueryVariables>(GetAllShowsDocument, baseOptions);
+      }
+export function useGetAllShowsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAllShowsQuery, GetAllShowsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetAllShowsQuery, GetAllShowsQueryVariables>(GetAllShowsDocument, baseOptions);
+        }
+export type GetAllShowsQueryHookResult = ReturnType<typeof useGetAllShowsQuery>;
+export type GetAllShowsLazyQueryHookResult = ReturnType<typeof useGetAllShowsLazyQuery>;
+export type GetAllShowsQueryResult = ApolloReactCommon.QueryResult<GetAllShowsQuery, GetAllShowsQueryVariables>;
