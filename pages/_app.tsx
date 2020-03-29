@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 
 import "../styles/index.css";
+import "react-mde/lib/styles/css/react-mde-all.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
