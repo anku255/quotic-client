@@ -14,7 +14,7 @@ import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } fro
 
 import Layout from "../../components/Layout";
 import QuoteCard from "../../components/Quote";
-import Input from "../../components/form/Input";
+import AddCharacter from "../../components/AddCharacter";
 
 const AddQuotesPage: React.FunctionComponent = () => {
   const [show, setShow] = useState<IShowOption | undefined | null>();
@@ -57,11 +57,23 @@ const AddQuotesPage: React.FunctionComponent = () => {
             </div>
             <div className="w-1/3 pr-4">
               <label>Season</label>
-              <Input type="text" name="season" value={season} onChange={e => setSeason(e.target.value)} />
+              <input
+                className=" bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+                type="text"
+                name="season"
+                value={season}
+                onChange={e => setSeason(e.target.value)}
+              />
             </div>
             <div className="w-1/3">
               <label>Episode</label>
-              <Input type="text" name="episode" value={episode} onChange={e => setEpisode(e.target.value)} />
+              <input
+                className=" bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+                type="text"
+                name="episode"
+                value={episode}
+                onChange={e => setEpisode(e.target.value)}
+              />
             </div>
           </div>
 
@@ -117,6 +129,8 @@ const AddQuotesPage: React.FunctionComponent = () => {
             </button>
           </div>
         </div>
+
+        <AddCharacter />
       </div>
     </Layout>
   );

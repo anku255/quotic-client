@@ -223,7 +223,7 @@ export type Character = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Show>>>;
   _id: Scalars['MongoID'];
@@ -263,7 +263,7 @@ export type CreateOneCharacterInput = {
   characterName: Scalars['String'];
   realName: Scalars['String'];
   imdbLink: Scalars['String'];
-  age: Scalars['Date'];
+  dob: Scalars['Date'];
   coverPicture: Scalars['String'];
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   updatedAt?: Maybe<Scalars['Date']>;
@@ -342,7 +342,7 @@ export type FilterCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id?: Maybe<Scalars['MongoID']>;
@@ -358,7 +358,7 @@ export type FilterFindManyCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id?: Maybe<Scalars['MongoID']>;
@@ -427,7 +427,7 @@ export type FilterFindOneCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id?: Maybe<Scalars['MongoID']>;
@@ -516,7 +516,7 @@ export type FilterRemoveOneCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id?: Maybe<Scalars['MongoID']>;
@@ -605,7 +605,7 @@ export type FilterUpdateOneCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id?: Maybe<Scalars['MongoID']>;
@@ -1276,7 +1276,7 @@ export type UpdateByIdCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   _id: Scalars['MongoID'];
@@ -1353,7 +1353,7 @@ export type UpdateOneCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Date']>;
+  dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   updatedAt?: Maybe<Scalars['Date']>;
@@ -1431,6 +1431,22 @@ export type User = {
   createdAt?: Maybe<Scalars['Date']>;
 };
 
+export type CreateCharacterMutationVariables = {
+  record: CreateOneCharacterInput;
+};
+
+
+export type CreateCharacterMutation = (
+  { __typename?: 'Mutation' }
+  & { characterCreateOne?: Maybe<(
+    { __typename?: 'CreateOneCharacterPayload' }
+    & { record?: Maybe<(
+      { __typename?: 'Character' }
+      & Pick<Character, '_id'>
+    )> }
+  )> }
+);
+
 export type CreateManyQuotesMutationVariables = {
   records: Array<CreateManyQuoteInput>;
 };
@@ -1487,6 +1503,40 @@ export type GetAllShowsQuery = (
 );
 
 
+export const CreateCharacterDocument = gql`
+    mutation createCharacter($record: CreateOneCharacterInput!) {
+  characterCreateOne(record: $record) {
+    record {
+      _id
+    }
+  }
+}
+    `;
+export type CreateCharacterMutationFn = ApolloReactCommon.MutationFunction<CreateCharacterMutation, CreateCharacterMutationVariables>;
+
+/**
+ * __useCreateCharacterMutation__
+ *
+ * To run a mutation, you first call `useCreateCharacterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCharacterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCharacterMutation, { data, loading, error }] = useCreateCharacterMutation({
+ *   variables: {
+ *      record: // value for 'record'
+ *   },
+ * });
+ */
+export function useCreateCharacterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCharacterMutation, CreateCharacterMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCharacterMutation, CreateCharacterMutationVariables>(CreateCharacterDocument, baseOptions);
+      }
+export type CreateCharacterMutationHookResult = ReturnType<typeof useCreateCharacterMutation>;
+export type CreateCharacterMutationResult = ApolloReactCommon.MutationResult<CreateCharacterMutation>;
+export type CreateCharacterMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCharacterMutation, CreateCharacterMutationVariables>;
 export const CreateManyQuotesDocument = gql`
     mutation createManyQuotes($records: [CreateManyQuoteInput!]!) {
   quoteCreateMany(records: $records) {
