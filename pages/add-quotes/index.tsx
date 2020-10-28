@@ -7,10 +7,10 @@ import {
   Show,
   useGetAllCharactersQuery,
   Quote,
-  useCreateManyQuotesMutation
+  useCreateManyQuotesMutation,
 } from "../../generated/apolloComponents";
 import { withApollo } from "../../lib/withApollo";
-import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } from "./helpers";
+import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } from "../../modules/add-quotes/helpers";
 
 import Layout from "../../components/Layout";
 import QuoteCard from "../../components/Quote";
@@ -29,9 +29,9 @@ const AddQuotesPage: React.FunctionComponent = () => {
   const { data: charactersData } = useGetAllCharactersQuery({
     variables: {
       filter: {
-        shows: [show?.value._id]
-      }
-    }
+        shows: [show?.value._id],
+      },
+    },
   });
 
   const showsCharacters = (charactersData?.characterMany ?? []).reduce((acc: CharacterMap, curr) => {
@@ -52,7 +52,7 @@ const AddQuotesPage: React.FunctionComponent = () => {
               <Select
                 options={getShowOptions(data?.showMany as [Show])}
                 value={show}
-                onChange={val => setShow(val as IShowOption)}
+                onChange={(val) => setShow(val as IShowOption)}
               />
             </div>
             <div className="w-1/3 pr-4">
@@ -62,7 +62,7 @@ const AddQuotesPage: React.FunctionComponent = () => {
                 type="text"
                 name="season"
                 value={season}
-                onChange={e => setSeason(e.target.value)}
+                onChange={(e) => setSeason(e.target.value)}
               />
             </div>
             <div className="w-1/3">
@@ -72,7 +72,7 @@ const AddQuotesPage: React.FunctionComponent = () => {
                 type="text"
                 name="episode"
                 value={episode}
-                onChange={e => setEpisode(e.target.value)}
+                onChange={(e) => setEpisode(e.target.value)}
               />
             </div>
           </div>
@@ -85,12 +85,12 @@ const AddQuotesPage: React.FunctionComponent = () => {
                 onChange={setValue}
                 selectedTab={selectedTab}
                 onTabChange={setSelectedTab}
-                generateMarkdownPreview={markdown => Promise.resolve(converter.makeHtml(markdown))}
+                generateMarkdownPreview={(markdown) => Promise.resolve(converter.makeHtml(markdown))}
               />
             </div>
             <div className="w-1/2">
               <div className="border border-gray-500 h-64 overflow-y-auto">
-                {quotes?.map(q => (
+                {quotes?.map((q) => (
                   <div key={q._id}>
                     <QuoteCard quote={q} />
                   </div>
@@ -101,7 +101,7 @@ const AddQuotesPage: React.FunctionComponent = () => {
           <div>
             <button
               className="mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 const parsed = parseQuotes(value, show as any, showsCharacters, parseInt(season), parseInt(episode));
 
@@ -112,16 +112,16 @@ const AddQuotesPage: React.FunctionComponent = () => {
             </button>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 createManyQuotes({
                   variables: {
-                    records: quotes?.map(q => ({
+                    records: quotes?.map((q) => ({
                       ...q,
-                      characters: q.characters?.map(c => c?._id),
-                      mainCharacter: q.mainCharacter?._id
-                    })) as any
-                  }
+                      characters: q.characters?.map((c) => c?._id),
+                      mainCharacter: q.mainCharacter?._id,
+                    })) as any,
+                  },
                 });
               }}
             >
