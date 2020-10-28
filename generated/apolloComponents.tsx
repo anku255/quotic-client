@@ -1491,6 +1491,26 @@ export type GetAllQuotesQuery = (
   )>>> }
 );
 
+export type QuoteManyQueryVariables = {
+  filter?: Maybe<FilterFindManyQuoteInput>;
+};
+
+
+export type QuoteManyQuery = (
+  { __typename?: 'Query' }
+  & { quoteMany?: Maybe<Array<Maybe<(
+    { __typename?: 'Quote' }
+    & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
+    & { show?: Maybe<(
+      { __typename?: 'Show' }
+      & Pick<Show, '_id'>
+    )>, characters?: Maybe<Array<Maybe<(
+      { __typename?: 'Character' }
+      & Pick<Character, '_id' | 'coverPicture' | 'characterName'>
+    )>>> }
+  )>>> }
+);
+
 export type GetAllShowsQueryVariables = {};
 
 
@@ -1643,6 +1663,50 @@ export function useGetAllQuotesLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type GetAllQuotesQueryHookResult = ReturnType<typeof useGetAllQuotesQuery>;
 export type GetAllQuotesLazyQueryHookResult = ReturnType<typeof useGetAllQuotesLazyQuery>;
 export type GetAllQuotesQueryResult = ApolloReactCommon.QueryResult<GetAllQuotesQuery, GetAllQuotesQueryVariables>;
+export const QuoteManyDocument = gql`
+    query quoteMany($filter: FilterFindManyQuoteInput) {
+  quoteMany(filter: $filter) {
+    _id
+    show {
+      _id
+    }
+    markup
+    season
+    episode
+    characters {
+      _id
+      coverPicture
+      characterName
+    }
+  }
+}
+    `;
+
+/**
+ * __useQuoteManyQuery__
+ *
+ * To run a query within a React component, call `useQuoteManyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteManyQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteManyQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useQuoteManyQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QuoteManyQuery, QuoteManyQueryVariables>) {
+        return ApolloReactHooks.useQuery<QuoteManyQuery, QuoteManyQueryVariables>(QuoteManyDocument, baseOptions);
+      }
+export function useQuoteManyLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QuoteManyQuery, QuoteManyQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<QuoteManyQuery, QuoteManyQueryVariables>(QuoteManyDocument, baseOptions);
+        }
+export type QuoteManyQueryHookResult = ReturnType<typeof useQuoteManyQuery>;
+export type QuoteManyLazyQueryHookResult = ReturnType<typeof useQuoteManyLazyQuery>;
+export type QuoteManyQueryResult = ApolloReactCommon.QueryResult<QuoteManyQuery, QuoteManyQueryVariables>;
 export const GetAllShowsDocument = gql`
     query getAllShows {
   showMany {
