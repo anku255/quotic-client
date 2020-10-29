@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/generated/*": ["generated/*"],
+      "@/modules/*": ["modules/*"],
+      "@/utils/*": ["utils/*"]
+    },
     "allowJs": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
@@ -19,5 +26,5 @@
     "target": "esnext"
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

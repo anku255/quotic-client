@@ -4,43 +4,34 @@ import Head from "next/head";
 
 type Props = {
   title?: string;
-  showFooter?: boolean;
 };
 
-const Layout: React.FunctionComponent<Props> = ({
-  children,
-  title = "This is the default title",
-  showFooter = true
-}) => (
+const Header = (): JSX.Element => (
+  <header>
+    <div className="flex justify-between items-center">
+      <h1 className="text-4xl">Quotic</h1>
+      <div className="text-sm font-bold uppercase tracking-wide">
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
+      </div>
+    </div>
+  </header>
+);
+
+const Layout: React.FunctionComponent<Props> = ({ children, title = "This is the default title" }) => (
   <div>
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,600&family=Source+Serif+Pro:wght@400;600&display=swap"
+        rel="stylesheet"
+      ></link>
     </Head>
-    <header>
-      <nav>
-        <Link href="/">
-          <a>Home</a>
-        </Link>{" "}
-        |{" "}
-        <Link href="/about">
-          <a>About</a>
-        </Link>{" "}
-        |{" "}
-        <Link href="/users">
-          <a>Users List</a>
-        </Link>{" "}
-        | <a href="/api/users">Users API</a>
-      </nav>
-    </header>
+    <Header />
     {children}
-    {showFooter && (
-      <footer>
-        <hr />
-        <span>I'm here to stay (Footer)</span>
-      </footer>
-    )}
   </div>
 );
 

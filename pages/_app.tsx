@@ -1,11 +1,16 @@
+import React from "react";
 import { AppProps } from "next/app";
 
 import "../styles/index.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
+  return (
+    <div className="px-6 py-12 bg-zircon antialiased">
+      <Component {...pageProps} />
+    </div>
+  );
+};
 
 // Only uncomment this method if you have blocking data requirements for
 // every single page in your application. This disables the ability to

@@ -5,3 +5,16 @@
 @import "tailwindcss/components";
 
 @import "tailwindcss/utilities";
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.grid-item {
+  flex-basis: 50%;
+  padding-bottom: 1rem;
+}
+
+.grid-item:nth-of-type(odd) {
+  padding-right: 1rem;
+}
