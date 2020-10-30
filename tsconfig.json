@@ -5,7 +5,8 @@
       "@/components/*": ["components/*"],
       "@/generated/*": ["generated/*"],
       "@/modules/*": ["modules/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
+      "@/mock/*": ["mock/*"],
     },
     "allowJs": true,
     "alwaysStrict": true,

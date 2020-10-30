@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Interstellar", "year": 2014, "imageUrl": "https://i.imgur.com/BsDy4ZP.png" },
+  { "id": 2, "name": "Doctor Strange", "year": 2016, "imageUrl": "https://i.imgur.com/HFAxRmB.png" },
+  { "id": 3, "name": "Stranger Things", "year": 2018, "imageUrl": "https://i.imgur.com/vK1GMwD.png" },
+  { "id": 4, "name": "The Big Bang Theory", "year": 2007, "imageUrl": "https://i.imgur.com/qJBq8HA.png" }
+]
