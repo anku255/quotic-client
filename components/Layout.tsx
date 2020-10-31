@@ -19,7 +19,7 @@ const Header = (): JSX.Element => (
   </header>
 );
 
-const Layout: React.FunctionComponent<Props> = ({ children, title = "This is the default title" }) => (
+export const Layout: React.FunctionComponent<Props> = ({ children, title = "This is the default title" }) => (
   <div>
     <Head>
       <title>{title}</title>
@@ -34,5 +34,3 @@ const Layout: React.FunctionComponent<Props> = ({ children, title = "This is the
     {children}
   </div>
 );
-
-export default Layout;

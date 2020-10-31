@@ -12,7 +12,7 @@ import {
 import { withApollo } from "../../lib/withApollo";
 import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } from "../../modules/add-quotes/helpers";
 
-import Layout from "../../components/Layout";
+import { Layout } from "@/components/Layout";
 import QuoteCard from "../../components/Quote";
 import AddCharacter from "../../components/AddCharacter";
 
