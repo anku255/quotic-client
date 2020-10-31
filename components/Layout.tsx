@@ -9,8 +9,8 @@ type Props = {
 const Header = (): JSX.Element => (
   <header>
     <div className="flex justify-between items-center">
-      <h1 className="text-4xl">Quotic</h1>
-      <div className="text-sm font-bold uppercase tracking-wide">
+      <h1 className="text-4xl font-semibold">Quotic</h1>
+      <div className="text-sm font-bold uppercase tracking-wide text-radicalRed">
         <Link href="/login">
           <a>Login</a>
         </Link>

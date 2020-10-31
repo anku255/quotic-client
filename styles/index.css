@@ -8,6 +8,7 @@
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
+  color: #000024;
 }
 
 .grid-item {
@@ -18,3 +19,13 @@ body {
 .grid-item:nth-of-type(odd) {
   padding-right: 1rem;
 }
+
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

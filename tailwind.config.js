@@ -16,6 +16,7 @@ module.exports = {
         blackRussian: "#000024",
         aliceBlue: "#EFF7FF",
         "baliHai-50": "#869BB31A",
+        radicalRed: "#FC2D52",
       },
       boxShadow: {
         primary: "0px 10px 20px #869BB31A",

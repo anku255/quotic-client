@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "noOfQuotes":156 ,
+    "showName": "Mr. Robot",
+    "showYear": 2015,
+    "seasons": 4,
+    "genre": "Drama",
+    "quote": "Saving The World. “I wanted to save the world.“",
+    "imageUrl": "https://i.imgur.com/91cJJrB.png"
+  },
+  {
+    "id": 2,
+    "noOfQuotes":100 ,
+    "showName": "Daredevil",
+    "showYear": 2015,
+    "seasons": 3,
+    "genre": "Action",
+    "quote": "I'm not seeking penance for what I've done, Father. I'm asking forgiveness for what I'm about to do.",
+    "imageUrl": "https://i.imgur.com/pnplAIU.jpg"
+  },
+  {
+    "id": 3,
+    "noOfQuotes":156 ,
+    "showName": "Mr. Robot",
+    "showYear": 2015,
+    "seasons": 4,
+    "genre": "Drama",
+    "quote": "Saving The World. “I wanted to save the world.“",
+    "imageUrl": "https://i.imgur.com/91cJJrB.png"
+  }
+]
