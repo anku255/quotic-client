@@ -8,7 +8,7 @@ import { Header } from "@/components/Header";
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
-    <div className="px-6 py-12 bg-zircon antialiased">
+    <div className="bg-zircon antialiased">
       {/* @ts-expect-error */}
       <Layout title={Component.title}>
         {/* @ts-expect-error */}

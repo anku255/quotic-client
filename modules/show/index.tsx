@@ -1,1 +1,1 @@
-export { default } from "./showPageA";
+export { default } from "./showPageB";

@@ -13,7 +13,7 @@ const Heading = ({ children }: { children: string }): JSX.Element => (
 
 export const HomePage: React.FunctionComponent = () => {
   return (
-    <div className="">
+    <div className="px-6">
       <div className="h-5"></div>
       <Searchbar />
       {/* TODO: Add Trending Tags */}
