@@ -1,12 +1,10 @@
 import React from "react";
 
-import { Layout } from "@/components/Layout";
 import { HomePage } from "@/modules/homepage";
 
-const IndexPage: React.FunctionComponent = () => (
-  <Layout title="Home | Quotic">
-    <HomePage />
-  </Layout>
-);
+const IndexPage: React.FunctionComponent = () => <HomePage />;
+
+// @ts-expect-error
+IndexPage.title = "Home";
 
 export default IndexPage;

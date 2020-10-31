@@ -21,5 +21,6 @@ module.exports = {
 
     "react/prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
   },
 };

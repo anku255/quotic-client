@@ -1,28 +1,15 @@
 import * as React from "react";
-import Link from "next/link";
+
 import Head from "next/head";
 
 type Props = {
   title?: string;
 };
 
-const Header = (): JSX.Element => (
-  <header>
-    <div className="flex justify-between items-center">
-      <h1 className="text-4xl font-semibold">Quotic</h1>
-      <div className="text-sm font-bold uppercase tracking-wide text-radicalRed">
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-      </div>
-    </div>
-  </header>
-);
-
-export const Layout: React.FunctionComponent<Props> = ({ children, title = "This is the default title" }) => (
+export const Layout: React.FunctionComponent<Props> = ({ children, title = "" }) => (
   <div>
     <Head>
-      <title>{title}</title>
+      <title>{title} | Quotic</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <link
@@ -30,7 +17,6 @@ export const Layout: React.FunctionComponent<Props> = ({ children, title = "This
         rel="stylesheet"
       ></link>
     </Head>
-    <Header />
     {children}
   </div>
 );

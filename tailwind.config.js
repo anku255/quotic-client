@@ -9,6 +9,7 @@ module.exports = {
         3.5: "0.875rem",
         14: "3.5rem",
         15: "3.75rem",
+        47: "11.5rem",
       },
       colors: {
         zircon: "#FCFDFF",
@@ -20,6 +21,7 @@ module.exports = {
       },
       boxShadow: {
         primary: "0px 10px 20px #869BB31A",
+        secondary: "0px 1px 10px #0000241A",
       },
       letterSpacing: {
         wide: "1.4px",

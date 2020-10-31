@@ -3,11 +3,18 @@ import { AppProps } from "next/app";
 
 import "../styles/index.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
+import { Layout } from "@/components/Layout";
+import { Header } from "@/components/Header";
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <div className="px-6 py-12 bg-zircon antialiased">
-      <Component {...pageProps} />
+      {/* @ts-expect-error */}
+      <Layout title={Component.title}>
+        {/* @ts-expect-error */}
+        {Component.Header ? <Component.Header /> : <Header />}
+        <Component {...pageProps} />
+      </Layout>
     </div>
   );
 };

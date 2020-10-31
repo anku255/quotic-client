@@ -6,6 +6,7 @@
       "@/generated/*": ["generated/*"],
       "@/modules/*": ["modules/*"],
       "@/utils/*": ["utils/*"],
+      "@/lib/*": ["lib/*"],
       "@/mock/*": ["mock/*"],
     },
     "allowJs": true,

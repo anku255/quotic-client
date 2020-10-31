@@ -32,9 +32,7 @@ export const initOnContext = (ctx: any) => {
   }
 
   // Initialize ApolloClient if not already done
-  const apolloClient =
-    ctx.apolloClient ||
-    initApolloClient(ctx.apolloState || {}, inAppContext ? ctx.ctx : ctx);
+  const apolloClient = ctx.apolloClient || initApolloClient(ctx.apolloState || {}, inAppContext ? ctx.ctx : ctx);
 
   // We send the Apollo Client as a prop to the component to avoid calling initApollo() twice in the server.
   // Otherwise, the component would have to call initApollo() again but this
@@ -59,10 +57,7 @@ export const initOnContext = (ctx: any) => {
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (
-  initialState: any,
-  ctx: NextPageContext | undefined
-) => {
+const initApolloClient = (initialState: any, ctx: NextPageContext | undefined) => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === "undefined") {
@@ -105,8 +100,7 @@ export const withApollo = ({ ssr = true } = {}) => (PageComponent: any) => {
 
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== "production") {
-    const displayName =
-      PageComponent.displayName || PageComponent.name || "Component";
+    const displayName = PageComponent.displayName || PageComponent.name || "Component";
     WithApollo.displayName = `withApollo(${displayName})`;
   }
 
@@ -173,10 +167,14 @@ export const withApollo = ({ ssr = true } = {}) => (PageComponent: any) => {
         apolloState: apolloClient.cache.extract(),
         // Provide the client for ssr. As soon as this payload
         // gets JSON.stringified it will remove itself.
-        apolloClient: ctx.apolloClient
+        apolloClient: ctx.apolloClient,
       };
     };
   }
+
+  // Pass the title and Header
+  WithApollo.title = PageComponent.title;
+  WithApollo.Header = PageComponent.Header;
 
   return WithApollo;
 };
