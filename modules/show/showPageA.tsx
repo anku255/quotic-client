@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import mrRobotQuotes from "@/mock/mr-robot-quotes.json";
+import { SelectField } from "./components/SelectField";
 
 const ShowDetail = () => (
   <div className="">
@@ -84,6 +85,27 @@ const QuoteCard = ({ showName, showYear, season, episode, quote, imageUrl }: Quo
   );
 };
 
+const seasonOptions = [
+  { label: "Season 1", value: "Season 1" },
+  { label: "Season 2", value: "Season 2" },
+  { label: "Season 3", value: "Season 3" },
+  { label: "Season 4", value: "Season 4" },
+];
+
+const episodeOptions = [
+  { label: "Episode 1", value: "Episode 1" },
+  { label: "Episode 2", value: "Episode 2" },
+  { label: "Episode 3", value: "Episode 3" },
+  { label: "Episode 4", value: "Episode 4" },
+];
+
+const characterOptions = [
+  { label: "Elliot Alderson", value: "Elliot Alderson" },
+  { label: "Darlene", value: "Darlene" },
+  { label: "Mr. Robot", value: "Mr. Robot" },
+  { label: "Angela", value: "Angela" },
+];
+
 const ShowPageA = () => {
   const router = useRouter();
   // const { data, loading, error } = useQuoteManyQuery({
@@ -97,10 +119,43 @@ const ShowPageA = () => {
   // if (loading) return <h1>Loading...</h1>;
 
   return (
-    <div className="">
+    <div className="px-4">
       <ShowDetail />
       <div className="h-8"></div>
       {/* TODO: Filters */}
+      <div className="flex justify-between">
+        <div className="flex-1 pr-4">
+          <SelectField
+            // defaultValue,
+            label="Season"
+            options={seasonOptions}
+            placeholder="Season"
+            // value={}
+            // onChange={}
+          />
+        </div>
+        <div className="flex-1 pr-4">
+          <SelectField
+            // defaultValue,
+            label="Episode"
+            options={episodeOptions}
+            placeholder="Episode"
+            // value={}
+            // onChange={}
+          />
+        </div>
+        <div className="flex-1">
+          <SelectField
+            // defaultValue,
+            label="Character"
+            options={characterOptions}
+            placeholder="Character"
+            // value={}
+            // onChange={}
+          />
+        </div>
+      </div>
+      <div className="h-8"></div>
       {mrRobotQuotes.map((quote) => (
         <div key={quote.id} className="">
           <QuoteCard
