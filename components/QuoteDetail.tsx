@@ -13,8 +13,8 @@ export const QuoteDetail = (): JSX.Element => {
     <div className="relative">
       <HeaderWithBackButton />
       {/* Image */}
-      <div className="absolute top-0 w-24 h-32">
-        {/* <svg viewBox="0 0 643 525">
+      {/* <div className="absolute top-0 w-24 h-32">
+        <svg viewBox="0 0 643 525">
           <defs>
             <clipPath id="clipPath">
               <path
@@ -33,13 +33,13 @@ export const QuoteDetail = (): JSX.Element => {
             clipPath="url(#clipPath)"
             xlinkHref="https://deadline.com/wp-content/uploads/2019/08/mrrobot_s4_key_art_final_-1-e1566934598188.jpg?w=1024g"
           ></image>
-        </svg> */}
-        {/* <img
+        </svg>
+        <img
           className="h-full object-cover"
           src="https://deadline.com/wp-content/uploads/2019/08/mrrobot_s4_key_art_final_-1-e1566934598188.jpg?w=1024"
           alt=""
-        /> */}
-      </div>
+        />
+      </div> */}
 
       <div className="text-center">
         <div className="text-2xl  font-semibold">Mr. Robot</div>
