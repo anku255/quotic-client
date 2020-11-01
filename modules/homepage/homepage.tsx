@@ -6,10 +6,7 @@ import trending from "@/mock/trending.json";
 import { ShowCard } from "@/components/ShowCard";
 import { TrendingQuoteCard } from "./components/TrendingShowCard";
 import { Searchbar } from "./components/Searchbar";
-
-const Heading = ({ children }: { children: string }): JSX.Element => (
-  <div className="text-xs font-bold tracking-wider uppercase text-blackRussian">{children}</div>
-);
+import { Heading } from "@/components/Typography";
 
 export const HomePage: React.FunctionComponent = () => {
   return (
