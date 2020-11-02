@@ -14,31 +14,25 @@ export const QuoteDetail = (): JSX.Element => {
       <HeaderWithBackButton />
       {/* Image */}
       {/* <div className="absolute top-0 w-24 h-32">
-        <svg viewBox="0 0 643 525">
+        <svg viewBox="0 0 176.607 131.26">
           <defs>
             <clipPath id="clipPath">
               <path
-                stroke="#000"
-                d="M329.039 113.894c3.285 84.114-116.054 172.16-116.054 172.16s-1.549-172.295-1.256-172.036c-1.617-4.408-3.143 1.615 117.31-.124z"
-                strokeOpacity="null"
-                strokeWidth="1.5"
+                d="M3989.9,1930H4146.7s4.589-.417,7.432,1.476,3.94,6.1,3.94,6.1V2051.41s.039,3.661-1.71,5.855-5.286,2.92-5.286,2.92h-73.586s-49.638-4.965-74.909-40.134-19.44-83.388-19.44-83.388a10.05,10.05,0,0,1,2.263-4.493A9.772,9.772,0,0,1,3989.9,1930Z"
+                transform="translate(-3981.971 -1929.425)"
                 fill="none"
+                stroke="none"
+                strokeWidth="0"
               />
             </clipPath>
           </defs>
           <image
-            width="643"
-            height="643"
-            style={{ borderRadius: "8888px" }}
+            width="176.607"
+            height="131.26"
             clipPath="url(#clipPath)"
             xlinkHref="https://deadline.com/wp-content/uploads/2019/08/mrrobot_s4_key_art_final_-1-e1566934598188.jpg?w=1024g"
           ></image>
         </svg>
-        <img
-          className="h-full object-cover"
-          src="https://deadline.com/wp-content/uploads/2019/08/mrrobot_s4_key_art_final_-1-e1566934598188.jpg?w=1024"
-          alt=""
-        />
       </div> */}
 
       <div className="text-center">
