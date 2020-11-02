@@ -1,8 +1,8 @@
 import React from "react";
-import mrRobotQuotes from "@/mock/mr-robot-quotes.json";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard } from "./components/QuoteCard";
+import { useQuoteManyQuery } from "@/generated/apolloComponents";
 
 const ShowDetail = () => (
   <div className="">
@@ -108,16 +108,26 @@ const characterOptions = [
 ];
 
 const ShowPageA = () => {
-  // const router = useRouter();
-  // const { data, loading, error } = useQuoteManyQuery({
-  //   variables: {
-  //     filter: {
-  //       show: router.query.showId,
-  //     },
-  //   },
-  // });
+  const router = useRouter();
+  const { data, loading, error } = useQuoteManyQuery({
+    variables: {
+      filter: {
+        show: router.query.showId,
+      },
+    },
+  });
 
-  // if (loading) return <h1>Loading...</h1>;
+  const quotes = (data?.quoteMany ?? []).map((quote) => ({
+    id: quote?._id,
+    characterName: quote?.characters?.[0]?.characterName,
+    imageUrl: quote?.characters?.[0]?.coverPicture,
+    season: quote?.season,
+    episode: quote?.episode,
+    quote: quote?.markup,
+    showYear: 2015, // TODO
+  }));
+
+  if (loading) return <h1>Loading...</h1>;
 
   return (
     <div className="px-4">
@@ -157,11 +167,11 @@ const ShowPageA = () => {
         </div>
       </div>
       <div className="h-8"></div>
-      {mrRobotQuotes.map((quote) => (
+      {quotes.map((quote) => (
         <div key={quote.id} className="mb-4">
           <QuoteCard
             id={quote.id}
-            showName={quote.showName}
+            characterName={quote.characterName}
             showYear={quote.showYear}
             season={quote.season}
             episode={quote.episode}

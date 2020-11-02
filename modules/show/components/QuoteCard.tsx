@@ -3,17 +3,17 @@ import Link from "next/link";
 
 interface QuoteCardProps {
   id: string;
-  showName: string;
-  showYear: number;
-  season?: number;
-  episode?: number;
-  quote: string;
-  imageUrl: string;
+  characterName: string | null | undefined;
+  showYear: number | null | undefined;
+  season: number | null | undefined;
+  episode: number | null | undefined;
+  quote: string | null | undefined;
+  imageUrl: string | null | undefined;
 }
 
 export const QuoteCard = ({
   id,
-  showName,
+  characterName,
   showYear,
   season,
   episode,
@@ -33,7 +33,7 @@ export const QuoteCard = ({
           <div className="flex">
             <div className="flex-1">
               <div className="flex justify-between">
-                <div className="text-2xl font-semibold leading-8">{showName}</div>
+                <div className="text-2xl font-semibold leading-8">{characterName}</div>
                 <div className="pr-4">
                   <button className="p-2 mr-4 rounded-full shadow-secondary text-baliHai">
                     {/* prettier-ignore */}
