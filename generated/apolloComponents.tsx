@@ -1503,12 +1503,32 @@ export type QuoteManyQuery = (
     & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
     & { show?: Maybe<(
       { __typename?: 'Show' }
-      & Pick<Show, '_id'>
+      & Pick<Show, '_id' | 'year'>
     )>, characters?: Maybe<Array<Maybe<(
       { __typename?: 'Character' }
       & Pick<Character, '_id' | 'coverPicture' | 'characterName'>
     )>>> }
   )>>> }
+);
+
+export type QuoteByIdQueryVariables = {
+  id: Scalars['MongoID'];
+};
+
+
+export type QuoteByIdQuery = (
+  { __typename?: 'Query' }
+  & { quoteById?: Maybe<(
+    { __typename?: 'Quote' }
+    & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
+    & { show?: Maybe<(
+      { __typename?: 'Show' }
+      & Pick<Show, '_id' | 'name' | 'year' | 'coverPicture'>
+    )>, characters?: Maybe<Array<Maybe<(
+      { __typename?: 'Character' }
+      & Pick<Character, '_id' | 'coverPicture' | 'characterName' | 'realName'>
+    )>>> }
+  )> }
 );
 
 export type GetAllShowsQueryVariables = {};
@@ -1669,6 +1689,7 @@ export const QuoteManyDocument = gql`
     _id
     show {
       _id
+      year
     }
     markup
     season
@@ -1707,6 +1728,54 @@ export function useQuoteManyLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
 export type QuoteManyQueryHookResult = ReturnType<typeof useQuoteManyQuery>;
 export type QuoteManyLazyQueryHookResult = ReturnType<typeof useQuoteManyLazyQuery>;
 export type QuoteManyQueryResult = ApolloReactCommon.QueryResult<QuoteManyQuery, QuoteManyQueryVariables>;
+export const QuoteByIdDocument = gql`
+    query quoteById($id: MongoID!) {
+  quoteById(_id: $id) {
+    _id
+    show {
+      _id
+      name
+      year
+      coverPicture
+    }
+    markup
+    season
+    episode
+    characters {
+      _id
+      coverPicture
+      characterName
+      realName
+    }
+  }
+}
+    `;
+
+/**
+ * __useQuoteByIdQuery__
+ *
+ * To run a query within a React component, call `useQuoteByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QuoteByIdQuery, QuoteByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<QuoteByIdQuery, QuoteByIdQueryVariables>(QuoteByIdDocument, baseOptions);
+      }
+export function useQuoteByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QuoteByIdQuery, QuoteByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<QuoteByIdQuery, QuoteByIdQueryVariables>(QuoteByIdDocument, baseOptions);
+        }
+export type QuoteByIdQueryHookResult = ReturnType<typeof useQuoteByIdQuery>;
+export type QuoteByIdLazyQueryHookResult = ReturnType<typeof useQuoteByIdLazyQuery>;
+export type QuoteByIdQueryResult = ApolloReactCommon.QueryResult<QuoteByIdQuery, QuoteByIdQueryVariables>;
 export const GetAllShowsDocument = gql`
     query getAllShows {
   showMany {

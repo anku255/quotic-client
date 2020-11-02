@@ -19,6 +19,7 @@ export const GET_QUOTES_QUERY = gql`
       _id
       show {
         _id
+        year
       }
       markup
       season
@@ -27,6 +28,29 @@ export const GET_QUOTES_QUERY = gql`
         _id
         coverPicture
         characterName
+      }
+    }
+  }
+`;
+
+export const GET_QUOTE_QUERY = gql`
+  query quoteById($id: MongoID!) {
+    quoteById(_id: $id) {
+      _id
+      show {
+        _id
+        name
+        year
+        coverPicture
+      }
+      markup
+      season
+      episode
+      characters {
+        _id
+        coverPicture
+        characterName
+        realName
       }
     }
   }

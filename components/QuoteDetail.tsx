@@ -1,14 +1,27 @@
 import React from "react";
+import { nullableString, nullableNumber } from "../types";
 import { HeaderWithBackButton } from "./HeaderWithBackButton";
 import { Heading } from "./Typography";
 
-const quoteMarkup = `
-<p>
-  <strong>Krista Gordon</strong>: What is it about society that disappoints you so much?</p>\n<p><strong>Elliot Alderson</strong>: Oh, I don't know. Is it that we collectively thought Steve Jobs was a great man, even when we knew he made billions off the backs of children? Or maybe it's that it feels like all our heroes are counterfeit. The world itself's just one big hoax. Spamming each other with our burning commentary of bullshit masquerading as insight. Our social media faking as intimacy. Or is it that we voted for this? Not with our rigged elections, but with our things. Our property. Our money. I'm not saying anything new. We all know why we do this. Not because Hunger Games books makes us happy. But because we wanna be sedated. Because it's painful not to pretend. Because we're cowards. ''Fuck society.''",
-</p>
-`;
+interface QuoteDetailProps {
+  id: string;
+  characters: Array<{ characterName: nullableString; realName: nullableString }>;
+  showName: nullableString;
+  showYear: nullableNumber;
+  season: nullableNumber;
+  episode: nullableNumber;
+  quote: nullableString;
+  imageUrl: nullableString;
+}
 
-export const QuoteDetail = (): JSX.Element => {
+export const QuoteDetail = ({
+  showName,
+  showYear,
+  characters,
+  episode,
+  season,
+  quote,
+}: QuoteDetailProps): JSX.Element => {
   return (
     <div className="relative">
       <HeaderWithBackButton />
@@ -36,11 +49,13 @@ export const QuoteDetail = (): JSX.Element => {
       </div> */}
 
       <div className="text-center">
-        <div className="text-2xl  font-semibold">Mr. Robot</div>
+        <div className="text-2xl  font-semibold">{showName}</div>
         <div className="flex justify-center font-serif text-sm text-radicalRed ">
-          <span className="">2015 &middot;&nbsp;</span>
-          <span className="">E4 S2 &middot;&nbsp;</span>
-          <span className="">23:45 min</span>
+          <span className="">{showYear} &middot;&nbsp;</span>
+          <span className="">
+            E{episode} S{season}
+          </span>
+          {/* <span className="">23:45 min</span> */}
         </div>
       </div>
 
@@ -50,14 +65,12 @@ export const QuoteDetail = (): JSX.Element => {
         <Heading>Character</Heading>
         <div className="h-3"></div>
         <div className="flex flex-wrap justify-between">
-          <div className="w-1/2">
-            <div className="font-semibold">Elliot Alderson</div>
-            <div className="font-serif text-baliHai">Rami Malek</div>
-          </div>
-          <div className="w-1/2">
-            <div className="font-semibold">Krista Gordon</div>
-            <div className="font-serif text-baliHai">Gloria Reuben</div>
-          </div>
+          {characters.map((c) => (
+            <div key={c.characterName!} className="w-1/2">
+              <div className="font-semibold">{c.characterName}</div>
+              <div className="font-serif text-baliHai">{c.realName}</div>
+            </div>
+          ))}
         </div>
         <div className="h-3"></div>
         {/* Dialogue Header */}
@@ -82,7 +95,7 @@ export const QuoteDetail = (): JSX.Element => {
         <div className="h-6"></div>
         {/* Dialogue content */}
         <div className="quote font-serif">
-          <div dangerouslySetInnerHTML={{ __html: quoteMarkup }} />
+          <div dangerouslySetInnerHTML={{ __html: quote! }} />
         </div>
         <style jsx global>{`
           .quote p:not(:last-child) {

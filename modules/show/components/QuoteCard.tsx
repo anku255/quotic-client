@@ -1,14 +1,15 @@
 import React from "react";
 import Link from "next/link";
+import { nullableString, nullableNumber } from "../../../types";
 
 interface QuoteCardProps {
   id: string;
-  characterName: string | null | undefined;
-  showYear: number | null | undefined;
-  season: number | null | undefined;
-  episode: number | null | undefined;
-  quote: string | null | undefined;
-  imageUrl: string | null | undefined;
+  characterName: nullableString;
+  showYear: nullableNumber;
+  season: nullableNumber;
+  episode: nullableNumber;
+  quote: nullableString;
+  imageUrl: nullableString;
 }
 
 export const QuoteCard = ({
@@ -17,10 +18,10 @@ export const QuoteCard = ({
   showYear,
   season,
   episode,
-  quote,
+  quote = "",
   imageUrl,
 }: QuoteCardProps): JSX.Element => {
-  const slicedQuote = quote.length > 200 ? quote.slice(0, 200) + "...</p>" : quote;
+  const slicedQuote = quote!.length > 200 ? quote!.slice(0, 200) + "...</p>" : quote;
   return (
     <Link
       href={`/quote/[quoteId]`}
@@ -60,12 +61,12 @@ export const QuoteCard = ({
               <div className="flex flex-1">
                 <div
                   className="font-serif text-blackRussian leading-6"
-                  dangerouslySetInnerHTML={{ __html: slicedQuote }}
+                  dangerouslySetInnerHTML={{ __html: slicedQuote! }}
                 ></div>
                 <div className="w-4 flex-shrink-0"></div>
                 {/* Image */}
                 <div className="-mt-3 flex-shrink-0 w-20">
-                  <img className="rounded-l-full w-full h-full object-cover" src={imageUrl} alt="" />
+                  <img className="rounded-l-full w-full h-full object-cover" src={imageUrl!} alt="" />
                 </div>
               </div>
             </div>
