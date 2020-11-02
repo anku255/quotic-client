@@ -15,7 +15,7 @@ import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } fro
 import QuoteCard from "../../components/Quote";
 import AddCharacter from "../../components/AddCharacter";
 
-const AddQuotesPage: React.FunctionComponent = () => {
+const AddQuotesPage = () => {
   const [show, setShow] = useState<IShowOption | undefined | null>();
   const [season, setSeason] = useState("");
   const [episode, setEpisode] = useState("");
@@ -133,7 +133,6 @@ const AddQuotesPage: React.FunctionComponent = () => {
   );
 };
 
-// @ts-expect-error
 AddQuotesPage.title = "Add Quotes";
 
 export default withApollo()(AddQuotesPage);

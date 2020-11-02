@@ -1,17 +1,14 @@
 import React from "react";
-import { AppProps } from "next/app";
 
 import "../styles/index.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Layout } from "@/components/Layout";
 import { Header } from "@/components/Header";
 
-const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
+const MyApp = ({ Component, pageProps }: { Component: any; pageProps: any }): JSX.Element => {
   return (
     <div className="bg-zircon antialiased">
-      {/* @ts-expect-error */}
       <Layout title={Component.title}>
-        {/* @ts-expect-error */}
         {Component.Header ? <Component.Header /> : <Header />}
         <Component {...pageProps} />
       </Layout>

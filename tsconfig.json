@@ -8,6 +8,7 @@
       "@/utils/*": ["utils/*"],
       "@/lib/*": ["lib/*"],
       "@/mock/*": ["mock/*"],
+      "@/types/*": ["types/*"],
     },
     "allowJs": true,
     "alwaysStrict": true,

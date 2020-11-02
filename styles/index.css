@@ -6,6 +6,7 @@
 
 @import "tailwindcss/utilities";
 
+/* purgecss start ignore */
 body {
   font-family: 'Source Sans Pro', sans-serif;
   color: #000024;
@@ -28,4 +29,5 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* purgecss end ignore */
 

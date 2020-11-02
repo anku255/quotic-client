@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import mrRobotQuotes from "@/mock/mr-robot-quotes.json";
 
-const ShowDetail = ({ router }) => (
+const ShowDetail = ({ router }: { router: NextRouter }) => (
   <div className="relative">
     {/* TODO: Masking via SVG */}
     <div className="h-48">
@@ -107,7 +107,7 @@ const QuoteCard = ({ showName, showYear, season, episode, quote, imageUrl }: Quo
   );
 };
 
-const ShowPageA = () => {
+const ShowPageA = (): JSX.Element => {
   const router = useRouter();
   // const { data, loading, error } = useQuoteManyQuery({
   //   variables: {
