@@ -1,8 +1,10 @@
 import React from "react";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import { QuoteDetail } from "@/components/QuoteDetail";
-import { useQuoteByIdQuery } from "@/generated/apolloComponents";
-import { withApollo } from "@/lib/withApollo";
+import { useQuoteByIdQuery } from "@/generated/apolloHooks";
+import { GET_QUOTE_QUERY } from "graphql/queries/quotes.queries";
+import { initializeApollo } from "@/lib/apolloClient";
 
 const QuotePage = (): JSX.Element => {
   const router = useRouter();
@@ -25,8 +27,6 @@ const QuotePage = (): JSX.Element => {
     quote: data?.quoteById?.markup,
   };
 
-  console.log("quote", quote);
-
   return <QuoteDetail {...quote} />;
 };
 
@@ -34,4 +34,28 @@ QuotePage.Header = () => null;
 
 QuotePage.title = "Quote";
 
-export default withApollo()(QuotePage);
+export default QuotePage;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: GET_QUOTE_QUERY,
+    variables: {
+      id: ctx?.params?.quoteId,
+    },
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+};

@@ -2,7 +2,7 @@ import React from "react";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard } from "./components/QuoteCard";
-import { useQuoteManyQuery } from "@/generated/apolloComponents";
+import { useQuoteManyQuery } from "@/generated/apolloHooks";
 
 const ShowDetail = () => (
   <div className="">
@@ -107,7 +107,7 @@ const characterOptions = [
   { label: "Angela", value: "Angela" },
 ];
 
-const ShowPageA = () => {
+const ShowPageA = (): JSX.Element => {
   const router = useRouter();
   const { data, loading, error } = useQuoteManyQuery({
     variables: {

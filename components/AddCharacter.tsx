@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useCreateCharacterMutation } from "../generated/apolloComponents";
+import { useCreateCharacterMutation } from "../generated/apolloHooks";
 
 import Input from "./form/Input";
 
@@ -19,7 +19,7 @@ export default function AddCharacter() {
   const [values, setValues] = useState<FormData>();
   const [createCharacter] = useCreateCharacterMutation();
 
-  const showPreview = handleSubmit(values => {
+  const showPreview = handleSubmit((values) => {
     setValues(values);
   });
 
@@ -28,9 +28,9 @@ export default function AddCharacter() {
       variables: {
         record: {
           ...values,
-          shows: values?.shows.split(", ")
-        } as any
-      }
+          shows: values?.shows.split(", "),
+        } as any,
+      },
     });
 
     alert("Character Created!");

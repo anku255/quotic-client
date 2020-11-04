@@ -1,4 +1,4 @@
-import { Character, Show } from "../../generated/apolloComponents";
+import { Character, Show } from "@/generated/apolloHooks";
 import Showdown from "showdown";
 
 export type CharacterMap = { [key: string]: Character };
@@ -9,16 +9,14 @@ export interface IShowOption {
 }
 
 export const getShowOptions = (shows: [Show]): Array<IShowOption> => {
-  return typeof shows === "undefined"
-    ? []
-    : shows.map(s => ({ label: s.name, value: s }));
+  return typeof shows === "undefined" ? [] : shows.map((s) => ({ label: s.name, value: s }));
 };
 
 export const converter = new Showdown.Converter({
   tables: true,
   simplifiedAutoLink: true,
   strikethrough: true,
-  tasklists: true
+  tasklists: true,
 });
 
 export const parseQuotes = (
@@ -28,10 +26,10 @@ export const parseQuotes = (
   season: number,
   episode: number
 ) => {
-  return value.split("---").map(quote => {
+  return value.split("---").map((quote) => {
     const characters = (quote.match(/(\*\*.*\*\*)/g) ?? [])
-      .map(c => c.replace(/\*/g, ""))
-      .map(c => showsCharacters[c]);
+      .map((c) => c.replace(/\*/g, ""))
+      .map((c) => showsCharacters[c]);
     return {
       raw: quote,
       markup: converter.makeHtml(quote),
@@ -39,7 +37,7 @@ export const parseQuotes = (
       characters,
       season,
       episode,
-      mainCharacter: characters[0]
+      mainCharacter: characters[0],
     };
   });
 };

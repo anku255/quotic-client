@@ -1,5 +1,5 @@
 import React from "react";
-import { Quote } from "../generated/apolloComponents";
+import { Quote } from "@/generated/apolloHooks";
 
 type Props = {
   quote: Quote;

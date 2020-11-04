@@ -1,4 +1,6 @@
 import React from "react";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "../lib/apolloClient";
 
 import "../styles/index.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -6,13 +8,16 @@ import { Layout } from "@/components/Layout";
 import { Header } from "@/components/Header";
 
 const MyApp = ({ Component, pageProps }: { Component: any; pageProps: any }): JSX.Element => {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <div className="bg-zircon antialiased">
-      <Layout title={Component.title}>
-        {Component.Header ? <Component.Header /> : <Header />}
-        <Component {...pageProps} />
-      </Layout>
-    </div>
+    <ApolloProvider client={apolloClient}>
+      <div className="bg-zircon antialiased">
+        <Layout title={Component.title}>
+          {Component.Header ? <Component.Header /> : <Header />}
+          <Component {...pageProps} />
+        </Layout>
+      </div>
+    </ApolloProvider>
   );
 };
 

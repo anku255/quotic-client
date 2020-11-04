@@ -8,14 +8,13 @@ import {
   useGetAllCharactersQuery,
   Quote,
   useCreateManyQuotesMutation,
-} from "../../generated/apolloComponents";
-import { withApollo } from "../../lib/withApollo";
-import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } from "../../modules/add-quotes/helpers";
+} from "@/generated/apolloHooks";
+import { converter, parseQuotes, IShowOption, CharacterMap, getShowOptions } from "@/modules/add-quotes/helpers";
 
 import QuoteCard from "../../components/Quote";
 import AddCharacter from "../../components/AddCharacter";
 
-const AddQuotesPage = () => {
+const AddQuotesPage = (): JSX.Element => {
   const [show, setShow] = useState<IShowOption | undefined | null>();
   const [season, setSeason] = useState("");
   const [episode, setEpisode] = useState("");
@@ -135,4 +134,4 @@ const AddQuotesPage = () => {
 
 AddQuotesPage.title = "Add Quotes";
 
-export default withApollo()(AddQuotesPage);
+export default AddQuotesPage;
