@@ -5,14 +5,14 @@ import shows from "@/mock/shows.json";
 import trending from "@/mock/trending.json";
 import { ShowCard } from "@/components/ShowCard";
 import { TrendingQuoteCard } from "./components/TrendingShowCard";
-import { Searchbar } from "./components/Searchbar";
 import { Heading } from "@/components/Typography";
+import { SearchField } from "@/components/SearchField";
 
 export const HomePage: React.FunctionComponent = () => {
   return (
     <div className="px-6">
       <div className="h-5"></div>
-      <Searchbar />
+      <SearchField />
       {/* TODO: Add Trending Tags */}
       <div className="h-8"></div>
       <Heading>Trending</Heading>
