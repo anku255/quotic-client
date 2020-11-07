@@ -1,9 +1,36 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+const plugin = require("tailwindcss/plugin");
+
+const lineClampPlugin = plugin(({ addUtilities }) => {
+  const newUtilities = {
+    ".clamp-1": {
+      display: "-webkit-box",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": "1",
+    },
+    ".clamp-2": {
+      display: "-webkit-box",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": "2",
+    },
+    ".clamp-3": {
+      display: "-webkit-box",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": "3",
+    },
+  };
+
+  addUtilities(newUtilities, ["responsive", "hover"]);
+});
+
 module.exports = {
   future: {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
   },
   purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}", "./modules/**/*.{js,ts,jsx,tsx}"],
+  plugins: [lineClampPlugin],
   theme: {
     extend: {
       fontFamily: {

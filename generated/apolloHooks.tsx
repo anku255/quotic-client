@@ -1053,6 +1053,7 @@ export type Query = {
   characterOne?: Maybe<Character>;
   characterMany?: Maybe<Array<Maybe<Character>>>;
   characterCount?: Maybe<Scalars['Int']>;
+  searchByQuery: Array<Maybe<SearchResult>>;
 };
 
 
@@ -1183,6 +1184,11 @@ export type QueryCharacterCountArgs = {
   filter?: Maybe<FilterCharacterInput>;
 };
 
+
+export type QuerySearchByQueryArgs = {
+  query: Scalars['String'];
+};
+
 export type Quote = {
   __typename?: 'Quote';
   markup?: Maybe<Scalars['String']>;
@@ -1268,6 +1274,17 @@ export type RemoveOneUserPayload = {
   recordId?: Maybe<Scalars['MongoID']>;
   /** Removed document */
   record?: Maybe<User>;
+};
+
+export type SearchResult = {
+  __typename?: 'SearchResult';
+  id: Scalars['MongoID'];
+  imageUrl: Scalars['String'];
+  type: Scalars['String'];
+  showYear?: Maybe<Scalars['Int']>;
+  showName?: Maybe<Scalars['String']>;
+  characterName?: Maybe<Scalars['String']>;
+  quote?: Maybe<Scalars['String']>;
 };
 
 export type Show = {
@@ -1668,6 +1685,19 @@ export type QuoteByIdQuery = (
   )> }
 );
 
+export type SearchByQueryQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type SearchByQueryQuery = (
+  { __typename?: 'Query' }
+  & { searchByQuery: Array<Maybe<(
+    { __typename?: 'SearchResult' }
+    & Pick<SearchResult, 'id' | 'imageUrl' | 'type' | 'quote' | 'showName' | 'showYear' | 'characterName'>
+  )>> }
+);
+
 export type GetAllShowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1913,6 +1943,45 @@ export function useQuoteByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type QuoteByIdQueryHookResult = ReturnType<typeof useQuoteByIdQuery>;
 export type QuoteByIdLazyQueryHookResult = ReturnType<typeof useQuoteByIdLazyQuery>;
 export type QuoteByIdQueryResult = Apollo.QueryResult<QuoteByIdQuery, QuoteByIdQueryVariables>;
+export const SearchByQueryDocument = gql`
+    query searchByQuery($query: String!) {
+  searchByQuery(query: $query) {
+    id
+    imageUrl
+    type
+    quote
+    showName
+    showYear
+    characterName
+  }
+}
+    `;
+
+/**
+ * __useSearchByQueryQuery__
+ *
+ * To run a query within a React component, call `useSearchByQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchByQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchByQueryQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useSearchByQueryQuery(baseOptions?: Apollo.QueryHookOptions<SearchByQueryQuery, SearchByQueryQueryVariables>) {
+        return Apollo.useQuery<SearchByQueryQuery, SearchByQueryQueryVariables>(SearchByQueryDocument, baseOptions);
+      }
+export function useSearchByQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchByQueryQuery, SearchByQueryQueryVariables>) {
+          return Apollo.useLazyQuery<SearchByQueryQuery, SearchByQueryQueryVariables>(SearchByQueryDocument, baseOptions);
+        }
+export type SearchByQueryQueryHookResult = ReturnType<typeof useSearchByQueryQuery>;
+export type SearchByQueryLazyQueryHookResult = ReturnType<typeof useSearchByQueryLazyQuery>;
+export type SearchByQueryQueryResult = Apollo.QueryResult<SearchByQueryQuery, SearchByQueryQueryVariables>;
 export const GetAllShowsDocument = gql`
     query getAllShows {
   showMany {

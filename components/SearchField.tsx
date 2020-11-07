@@ -1,31 +1,13 @@
-import { stripHtml } from "@/utils/strip-html";
 import React, { useState } from "react";
 import AutoSuggest from "react-autosuggest";
-
-const quotesSuggestions = [
-  { type: "show", id: 1, showName: "Mr. Robot", showYear: 2015, imageUrl: "https://i.imgur.com/91cJJrB.png" },
-  { type: "show", id: 1, showName: "The Big Bang Theory", showYear: 2009, imageUrl: "https://i.imgur.com/qJBq8HA.png" },
-  {
-    type: "quote",
-    id: 2,
-    quote: `
-    <p><strong>Elliot: </strong> <p>A bug is never just a mistake</p></p>
-  `,
-    imageUrl: "https://i.imgur.com/kv3nT2a.png",
-  },
-  {
-    type: "character",
-    id: 3,
-    characterName: "Elliot Alerson",
-    showName: "Mr. Robot",
-    imageUrl: "https://i.imgur.com/91cJJrB.png",
-  },
-];
+import Link from "next/link";
+import { useApolloClient } from "@apollo/client";
+import { stripHtml } from "@/utils/strip-html";
+import { SEARCH_QUERY } from "graphql/queries/search.queries";
 
 interface IBaseSuggestion {
-  id: number;
+  id: string;
   imageUrl: string;
-  multiSection: boolean;
 }
 
 interface IQuoteSuggestion extends IBaseSuggestion {
@@ -60,16 +42,26 @@ const getSuggestionValue = (suggestion: ISuggestion): string => {
   }
 };
 
-const SuggestionContainer = ({ children }: { children: React.ReactNode }) => (
+const SuggestionContainer = ({
+  type,
+  id,
+  children,
+}: {
+  type: "quote" | "character" | "show";
+  id: string;
+  children: React.ReactNode;
+}) => (
   <div className="p-3">
-    <div className="flex items-center">{children}</div>
+    <Link href={`/${type}/[${type}Id]`} as={`/${type}/${id}`}>
+      <a className="flex items-center">{children}</a>
+    </Link>
   </div>
 );
 
 const SuggestionItem = (suggestion: ISuggestion) => {
   if (suggestion.type === "show") {
     return (
-      <SuggestionContainer>
+      <SuggestionContainer id={suggestion.id} type={suggestion.type}>
         <div className="w-10 h-12">
           <img className="w-full h-full object-cover rounded" src={suggestion.imageUrl} alt="" />
         </div>
@@ -83,7 +75,7 @@ const SuggestionItem = (suggestion: ISuggestion) => {
 
   if (suggestion.type === "character") {
     return (
-      <SuggestionContainer>
+      <SuggestionContainer id={suggestion.id} type={suggestion.type}>
         <div className="w-10 h-12">
           <img className="w-full h-full object-cover rounded" src={suggestion.imageUrl} alt="" />
         </div>
@@ -97,12 +89,12 @@ const SuggestionItem = (suggestion: ISuggestion) => {
 
   if (suggestion.type === "quote") {
     return (
-      <SuggestionContainer>
-        <div className="w-10 h-12">
+      <SuggestionContainer id={suggestion.id} type={suggestion.type}>
+        <div className="w-10 h-12 flex-shrink-0">
           <img className="w-full h-full object-cover rounded" src={suggestion.imageUrl} alt="" />
         </div>
         <div className="pl-3">
-          <div className="font-serif" dangerouslySetInnerHTML={{ __html: suggestion.quote }} />
+          <div className="font-serif overflow-hidden clamp-2" dangerouslySetInnerHTML={{ __html: suggestion.quote }} />
         </div>
       </SuggestionContainer>
     );
@@ -113,17 +105,23 @@ const SuggestionItem = (suggestion: ISuggestion) => {
 
 export const SearchField = (): JSX.Element => {
   const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState(quotesSuggestions);
+  const [suggestions, setSuggestions] = useState([]);
+  const client = useApolloClient();
 
   return (
     <div className="search-field relative">
       <AutoSuggest<any>
         suggestions={suggestions}
         onSuggestionsClearRequested={() => setSuggestions([])}
-        onSuggestionsFetchRequested={({ value }) => {
+        onSuggestionsFetchRequested={async ({ value }) => {
           setValue(value);
-          setSuggestions(quotesSuggestions);
+          const res = await client.query({
+            query: SEARCH_QUERY,
+            variables: { query: value },
+          });
+          setSuggestions(res.data.searchByQuery as any);
         }}
+        shouldRenderSuggestions={(value) => value.length > 2}
         onSuggestionSelected={(_, { suggestionValue }) => console.log("Selected: " + suggestionValue)}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={(suggestion) => <SuggestionItem {...suggestion} />}
