@@ -1,6 +1,8 @@
 overwrite: true
 schema: "http://localhost:8000/graphql"
-documents: "graphql/**/*.ts"
+documents:
+  - "graphql/**/*.ts"
+  - "modules/**/*gql.ts"
 generates:
   generated/apolloHooks.tsx:
     plugins:

@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { initializeApollo } from "@/lib/apolloClient";
 import ShowDetailPage from "@/modules/show";
 import { HeaderWithBackButton } from "@/components/HeaderWithBackButton";
-import { GET_QUOTES_QUERY } from "graphql/queries/quotes.queries";
+import { SHOW_PAGE_QUERY } from "@/modules/show/show.gql";
 
 const ShowPage = (): JSX.Element => {
   return <ShowDetailPage />;
@@ -30,9 +30,10 @@ export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext)
   const apolloClient = initializeApollo();
 
   await apolloClient.query({
-    query: GET_QUOTES_QUERY,
+    query: SHOW_PAGE_QUERY,
     variables: {
-      filter: {
+      showId: ctx?.params?.showId,
+      quotesFilter: {
         show: ctx?.params?.showId,
       },
     },

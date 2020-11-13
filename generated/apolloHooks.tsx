@@ -227,6 +227,7 @@ export type Character = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Show>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id: Scalars['MongoID'];
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -243,7 +244,7 @@ export type CreateManyQuoteInput = {
   raw: Scalars['String'];
   show: Scalars['MongoID'];
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  mainCharacter: Scalars['MongoID'];
+  mainCharacter?: Maybe<Scalars['MongoID']>;
   season: Scalars['Float'];
   episode: Scalars['Float'];
   timestamp?: Maybe<Scalars['String']>;
@@ -267,9 +268,10 @@ export type CreateOneCharacterInput = {
   characterName: Scalars['String'];
   realName: Scalars['String'];
   imdbLink: Scalars['String'];
-  dob: Scalars['Date'];
+  dob?: Maybe<Scalars['Date']>;
   coverPicture: Scalars['String'];
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
@@ -287,7 +289,7 @@ export type CreateOneQuoteInput = {
   raw: Scalars['String'];
   show: Scalars['MongoID'];
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  mainCharacter: Scalars['MongoID'];
+  mainCharacter?: Maybe<Scalars['MongoID']>;
   season: Scalars['Float'];
   episode: Scalars['Float'];
   timestamp?: Maybe<Scalars['String']>;
@@ -312,6 +314,7 @@ export type CreateOneShowInput = {
   type: EnumShowType;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -357,6 +360,7 @@ export type FilterCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -374,6 +378,7 @@ export type FilterFindManyCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -412,6 +417,7 @@ export type FilterFindManyShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -447,6 +453,7 @@ export type FilterFindOneCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -485,6 +492,7 @@ export type FilterFindOneShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -541,6 +549,7 @@ export type FilterRemoveOneCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -579,6 +588,7 @@ export type FilterRemoveOneShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -614,6 +624,7 @@ export type FilterShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -635,6 +646,7 @@ export type FilterUpdateOneCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -673,6 +685,7 @@ export type FilterUpdateOneShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -1295,6 +1308,7 @@ export type Show = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodes>>>;
   characters?: Maybe<Array<Maybe<Character>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -1308,6 +1322,17 @@ export type Show = {
 export type ShowCharactersArgs = {
   limit?: Maybe<Scalars['Int']>;
   sort?: Maybe<SortFindByIdsCharacterInput>;
+};
+
+export type ShowEpisodes = {
+  __typename?: 'ShowEpisodes';
+  season?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Scalars['Float']>;
+};
+
+export type ShowEpisodesInput = {
+  season?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Scalars['Float']>;
 };
 
 export enum SortFindByIdsCharacterInput {
@@ -1417,6 +1442,7 @@ export type UpdateByIdCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   _id: Scalars['MongoID'];
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -1461,6 +1487,7 @@ export type UpdateByIdShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -1502,6 +1529,7 @@ export type UpdateOneCharacterInput = {
   dob?: Maybe<Scalars['Date']>;
   coverPicture?: Maybe<Scalars['String']>;
   shows?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  bioMarkup?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
@@ -1544,6 +1572,7 @@ export type UpdateOneShowInput = {
   type?: Maybe<EnumShowType>;
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
+  episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
   characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
@@ -1706,6 +1735,36 @@ export type GetAllShowsQuery = (
   & { showMany?: Maybe<Array<Maybe<(
     { __typename?: 'Show' }
     & Pick<Show, 'name' | '_id'>
+  )>>> }
+);
+
+export type ShowPageQueryVariables = Exact<{
+  showId: Scalars['MongoID'];
+  quotesFilter?: Maybe<FilterFindManyQuoteInput>;
+  quoteCountFilter?: Maybe<FilterQuoteInput>;
+}>;
+
+
+export type ShowPageQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'quoteCount'>
+  & { showById?: Maybe<(
+    { __typename?: 'Show' }
+    & Pick<Show, '_id' | 'name' | 'description' | 'genre' | 'type' | 'year' | 'coverPicture' | 'imdbLink' | 'seasons'>
+    & { episodes?: Maybe<Array<Maybe<(
+      { __typename?: 'ShowEpisodes' }
+      & Pick<ShowEpisodes, 'season' | 'episodes'>
+    )>>> }
+  )>, quoteMany?: Maybe<Array<Maybe<(
+    { __typename?: 'Quote' }
+    & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
+    & { show?: Maybe<(
+      { __typename?: 'Show' }
+      & Pick<Show, '_id' | 'year'>
+    )>, characters?: Maybe<Array<Maybe<(
+      { __typename?: 'Character' }
+      & Pick<Character, '_id' | 'coverPicture' | 'characterName'>
+    )>>> }
   )>>> }
 );
 
@@ -2015,3 +2074,66 @@ export function useGetAllShowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAllShowsQueryHookResult = ReturnType<typeof useGetAllShowsQuery>;
 export type GetAllShowsLazyQueryHookResult = ReturnType<typeof useGetAllShowsLazyQuery>;
 export type GetAllShowsQueryResult = Apollo.QueryResult<GetAllShowsQuery, GetAllShowsQueryVariables>;
+export const ShowPageDocument = gql`
+    query showPage($showId: MongoID!, $quotesFilter: FilterFindManyQuoteInput, $quoteCountFilter: FilterQuoteInput) {
+  showById(_id: $showId) {
+    _id
+    name
+    description
+    genre
+    type
+    year
+    coverPicture
+    imdbLink
+    seasons
+    episodes {
+      season
+      episodes
+    }
+  }
+  quoteMany(filter: $quotesFilter) {
+    _id
+    show {
+      _id
+      year
+    }
+    markup
+    season
+    episode
+    characters {
+      _id
+      coverPicture
+      characterName
+    }
+  }
+  quoteCount(filter: $quoteCountFilter)
+}
+    `;
+
+/**
+ * __useShowPageQuery__
+ *
+ * To run a query within a React component, call `useShowPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShowPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShowPageQuery({
+ *   variables: {
+ *      showId: // value for 'showId'
+ *      quotesFilter: // value for 'quotesFilter'
+ *      quoteCountFilter: // value for 'quoteCountFilter'
+ *   },
+ * });
+ */
+export function useShowPageQuery(baseOptions?: Apollo.QueryHookOptions<ShowPageQuery, ShowPageQueryVariables>) {
+        return Apollo.useQuery<ShowPageQuery, ShowPageQueryVariables>(ShowPageDocument, baseOptions);
+      }
+export function useShowPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShowPageQuery, ShowPageQueryVariables>) {
+          return Apollo.useLazyQuery<ShowPageQuery, ShowPageQueryVariables>(ShowPageDocument, baseOptions);
+        }
+export type ShowPageQueryHookResult = ReturnType<typeof useShowPageQuery>;
+export type ShowPageLazyQueryHookResult = ReturnType<typeof useShowPageLazyQuery>;
+export type ShowPageQueryResult = Apollo.QueryResult<ShowPageQuery, ShowPageQueryVariables>;

@@ -2,30 +2,27 @@ import React from "react";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard } from "./components/QuoteCard";
-import { useQuoteManyQuery } from "@/generated/apolloHooks";
+import { useShowPageQuery } from "@/generated/apolloHooks";
 
-const ShowDetail = () => (
+const ShowDetail = ({ show }) => (
   <div className="">
-    <h1 className="text-3xl font-semibold">Mr. Robot</h1>
+    <h1 className="text-3xl font-semibold">{show.name}</h1>
     <div className="flex font-serif text-sm text-baliHai ">
-      <span className="">2015 &middot;&nbsp;</span>
-      <span className="">Season 4 &middot;&nbsp;</span>
+      <span className="">{show.year} &middot;&nbsp;</span>
+      <span className="">Season {show.seasons} &middot;&nbsp;</span>
       <span className="">IMDb 8.5 &middot;&nbsp;</span>
-      <span className="">987 Quotes</span>
+      <span className="">{show.quotesCount} Quotes</span>
     </div>
 
     <div className="h-6"></div>
     <div className="flex">
       {/* Image */}
       <div className="pr-4 flex-shrink-0 w-32 h-47">
-        <img className="h-full object-cover rounded-lg shadow-primary" src="https://i.imgur.com/6nMJmcQ.png" alt="" />
+        <img className="h-full object-cover rounded-lg shadow-primary" src={show.coverPicture} alt="" />
       </div>
       {/* TODO: Implement proper truncate */}
       {/* Description */}
-      <p className="flex-1 text-md font-serif h-47 overflow-hidden">
-        "Mr. Robot," is a techno thriller that follows Elliot, a young programmer, who works as a cyber-security
-        engineer by day and as a vigilante hacker by night.
-      </p>
+      <p className="flex-1 text-md font-serif h-47 overflow-hidden">{show.description}</p>
     </div>
   </div>
 );
@@ -86,6 +83,8 @@ const ShowDetail = () => (
 //   );
 // };
 
+// const getOptions = (labelPrefix: string)
+
 const seasonOptions = [
   { label: "Season 1", value: "Season 1" },
   { label: "Season 2", value: "Season 2" },
@@ -109,13 +108,19 @@ const characterOptions = [
 
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
-  const { data, loading, error } = useQuoteManyQuery({
+  const { data, loading, error } = useShowPageQuery({
     variables: {
-      filter: {
+      showId: router.query.showId,
+      quotesFilter: {
         show: router.query.showId,
       },
     },
   });
+
+  const show = {
+    ...data?.showById,
+    quotesCount: data?.quoteCount,
+  };
 
   const quotes = (data?.quoteMany ?? []).map((quote) => ({
     id: quote?._id,
@@ -124,14 +129,14 @@ const ShowPageA = (): JSX.Element => {
     season: quote?.season,
     episode: quote?.episode,
     quote: quote?.markup,
-    showYear: 2015, // TODO
+    showYear: (show as any)?.year, // TODO
   }));
 
   if (loading) return <h1>Loading...</h1>;
 
   return (
     <div className="px-4">
-      <ShowDetail />
+      <ShowDetail show={show} />
       <div className="h-8"></div>
       {/* TODO: Filters */}
       <div className="flex justify-between">
