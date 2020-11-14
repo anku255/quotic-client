@@ -21,14 +21,8 @@ export const QuoteCard = ({
   quote = "",
   imageUrl,
 }: QuoteCardProps): JSX.Element => {
-  const slicedQuote = quote!.length > 200 ? quote!.slice(0, 200) + "...</p>" : quote;
   return (
-    <Link
-      href={`/quote/[quoteId]`}
-      // href={`/show/[showId]?quoteId=${id}`}
-      as={`/quote/${id}`}
-      shallow
-    >
+    <Link href={`/quote/[quoteId]`} as={`/quote/${id}`} shallow>
       <a className="block">
         <div className="w-full p-4 pr-0 border border-aliceBlue bg-white shadow-primary rounded-lg">
           <div className="flex">
@@ -57,11 +51,10 @@ export const QuoteCard = ({
                 </span>
               </div>
               <div className="h-3"></div>
-              {/* TODO: Fix text overflow */}
               <div className="flex flex-1">
                 <div
-                  className="font-serif text-blackRussian leading-6"
-                  dangerouslySetInnerHTML={{ __html: slicedQuote! }}
+                  className="font-serif flex-1 text-blackRussian leading-6 clamp-5 overflow-hidden"
+                  dangerouslySetInnerHTML={{ __html: quote! }}
                 ></div>
                 <div className="w-4 flex-shrink-0"></div>
                 {/* Image */}

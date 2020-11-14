@@ -24,12 +24,11 @@ const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
     <div className="h-6"></div>
     <div className="flex">
       {/* Image */}
-      <div className="pr-4 flex-shrink-0 w-32 h-47">
+      <div className="pr-4 flex-shrink-0 w-32 h-42">
         <img className="h-full object-cover rounded-lg shadow-primary" src={show.coverPicture!} alt="" />
       </div>
-      {/* TODO: Implement proper truncate */}
       {/* Description */}
-      <p className="flex-1 text-md font-serif h-47 overflow-hidden">{show.description}</p>
+      <p className="flex-1 text-md font-serif clamp-7 overflow-hidden">{show.description}</p>
     </div>
   </div>
 );

@@ -31,12 +31,8 @@ export const TrendingQuoteCard = ({
           <span className="">{seasons} Seasons</span>
         </div>
         <div className="h-3"></div>
-        {/* TODO: Fix text overflow */}
         <div className="flex flex-1 h-12">
-          <div className="font-serif text-blackRussian leading-6">
-            {quote.slice(0, 50)}
-            {quote.length > 50 ? "..." : ""}
-          </div>
+          <div className="font-serif text-blackRussian leading-6 clamp-2 overflow-hidden">{quote}</div>
         </div>
       </div>
 

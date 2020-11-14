@@ -19,6 +19,16 @@ const lineClampPlugin = plugin(({ addUtilities }) => {
       "-webkit-box-orient": "vertical",
       "-webkit-line-clamp": "3",
     },
+    ".clamp-5": {
+      display: "-webkit-box",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": "5",
+    },
+    ".clamp-7": {
+      display: "-webkit-box",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": "7",
+    },
   };
 
   addUtilities(newUtilities, ["responsive", "hover"]);
@@ -41,6 +51,7 @@ module.exports = {
         3.5: "0.875rem",
         14: "3.5rem",
         15: "3.75rem",
+        42: "10.5rem",
         47: "11.5rem",
       },
       colors: {
