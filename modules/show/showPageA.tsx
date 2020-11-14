@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Router from "next/router";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard } from "./components/QuoteCard";
-import { useShowPageQuery } from "@/generated/apolloHooks";
+import { useShowPageQuery, Show } from "@/generated/apolloHooks";
+import { If } from "@/components/If";
+import { nullableNumber } from "@/types/index";
 
-const ShowDetail = ({ show }) => (
+interface ShowWithQuoteCount extends Show {
+  quotesCount?: nullableNumber;
+}
+
+const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
   <div className="">
     <h1 className="text-3xl font-semibold">{show.name}</h1>
     <div className="flex font-serif text-sm text-baliHai ">
       <span className="">{show.year} &middot;&nbsp;</span>
-      <span className="">Season {show.seasons} &middot;&nbsp;</span>
+      <span className="">Seasons {show.seasons} &middot;&nbsp;</span>
       <span className="">IMDb 8.5 &middot;&nbsp;</span>
       <span className="">{show.quotesCount} Quotes</span>
     </div>
@@ -18,7 +25,7 @@ const ShowDetail = ({ show }) => (
     <div className="flex">
       {/* Image */}
       <div className="pr-4 flex-shrink-0 w-32 h-47">
-        <img className="h-full object-cover rounded-lg shadow-primary" src={show.coverPicture} alt="" />
+        <img className="h-full object-cover rounded-lg shadow-primary" src={show.coverPicture!} alt="" />
       </div>
       {/* TODO: Implement proper truncate */}
       {/* Description */}
@@ -83,21 +90,14 @@ const ShowDetail = ({ show }) => (
 //   );
 // };
 
-// const getOptions = (labelPrefix: string)
-
-const seasonOptions = [
-  { label: "Season 1", value: "Season 1" },
-  { label: "Season 2", value: "Season 2" },
-  { label: "Season 3", value: "Season 3" },
-  { label: "Season 4", value: "Season 4" },
-];
-
-const episodeOptions = [
-  { label: "Episode 1", value: "Episode 1" },
-  { label: "Episode 2", value: "Episode 2" },
-  { label: "Episode 3", value: "Episode 3" },
-  { label: "Episode 4", value: "Episode 4" },
-];
+/**
+ *
+ * @param labelPrefix Season | Episode
+ * @param count total number of options
+ * @returns [ {label: 'Season 1', value '1' }...]
+ */
+const getOptions = (labelPrefix: string, count: number) =>
+  new Array(count).fill(0).map((_, i) => ({ label: `${labelPrefix} ${i + 1}`, value: `${i + 1}` }));
 
 const characterOptions = [
   { label: "Elliot Alderson", value: "Elliot Alderson" },
@@ -108,17 +108,49 @@ const characterOptions = [
 
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
+  const selectedSeason = router.query.season ? +router.query.season : 1;
+  const selectedEpisode = router.query.episode ? +router.query.episode : 1;
+  const [loadingQuotes, setLoadingQuotes] = useState(false);
+
   const { data, loading, error } = useShowPageQuery({
     variables: {
       showId: router.query.showId,
       quotesFilter: {
         show: router.query.showId,
+        season: selectedSeason,
+        episode: selectedEpisode,
       },
     },
   });
 
-  const show = {
+  useEffect(() => {
+    const handleRouteChangeStart = (nextUrl: string) => {
+      const { host, protocol, pathname } = window.location;
+      const url = new URL(`${protocol}//${host}${nextUrl}`);
+      const isShowPage = url.pathname === pathname;
+      if (isShowPage) {
+        setLoadingQuotes(true);
+      }
+    };
+
+    const handleRouteChangeComplete = () => {
+      setLoadingQuotes(false);
+    };
+
+    Router.events.on("routeChangeStart", handleRouteChangeStart);
+    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    Router.events.on("routeChangeError", handleRouteChangeComplete);
+
+    return () => {
+      Router.events.off("routeChangeStart", handleRouteChangeStart);
+      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      Router.events.off("routeChangeError", handleRouteChangeComplete);
+    };
+  }, []);
+
+  const show: ShowWithQuoteCount = {
     ...data?.showById,
+    _id: data?.showById?._id,
     quotesCount: data?.quoteCount,
   };
 
@@ -129,7 +161,7 @@ const ShowPageA = (): JSX.Element => {
     season: quote?.season,
     episode: quote?.episode,
     quote: quote?.markup,
-    showYear: (show as any)?.year, // TODO
+    showYear: (show as any)?.year,
   }));
 
   if (loading) return <h1>Loading...</h1>;
@@ -142,22 +174,36 @@ const ShowPageA = (): JSX.Element => {
       <div className="flex justify-between">
         <div className="flex-1 pr-4">
           <SelectField
-            // defaultValue,
             label="Season"
-            options={seasonOptions}
+            options={getOptions("Season", show?.episodes?.length ?? 1)}
             placeholder="Season"
-            // value={}
-            // onChange={}
+            value={{ label: `Season ${selectedSeason}`, value: `${selectedSeason}` }}
+            onChange={(option) => {
+              const nextSeason = +option.value;
+              if (selectedSeason !== nextSeason) {
+                router.push(
+                  `/shows/[showId]?season=${nextSeason}`,
+                  `/shows/${router.query.showId}?season=${nextSeason}`
+                );
+              }
+            }}
           />
         </div>
         <div className="flex-1 pr-4">
           <SelectField
-            // defaultValue,
             label="Episode"
-            options={episodeOptions}
+            options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
             placeholder="Episode"
-            // value={}
-            // onChange={}
+            value={{ label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` }}
+            onChange={(option) => {
+              const nextEpisode = +option.value;
+              if (selectedEpisode !== nextEpisode) {
+                router.push(
+                  `/shows/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
+                  `/shows/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
+                );
+              }
+            }}
           />
         </div>
         <div className="flex-1">
@@ -172,19 +218,23 @@ const ShowPageA = (): JSX.Element => {
         </div>
       </div>
       <div className="h-8"></div>
-      {quotes.map((quote) => (
-        <div key={quote.id} className="mb-4">
-          <QuoteCard
-            id={quote.id}
-            characterName={quote.characterName}
-            showYear={quote.showYear}
-            season={quote.season}
-            episode={quote.episode}
-            quote={quote.quote}
-            imageUrl={quote.imageUrl}
-          />
-        </div>
-      ))}
+      <If
+        condition={loadingQuotes}
+        then={<div>Loading...</div>}
+        else={quotes.map((quote) => (
+          <div key={quote.id} className="mb-4">
+            <QuoteCard
+              id={quote.id}
+              characterName={quote.characterName}
+              showYear={quote.showYear}
+              season={quote.season}
+              episode={quote.episode}
+              quote={quote.quote}
+              imageUrl={quote.imageUrl}
+            />
+          </div>
+        ))}
+      />
     </div>
   );
 };
