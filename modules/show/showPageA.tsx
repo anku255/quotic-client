@@ -180,10 +180,7 @@ const ShowPageA = (): JSX.Element => {
             onChange={(option) => {
               const nextSeason = +option.value;
               if (selectedSeason !== nextSeason) {
-                router.push(
-                  `/shows/[showId]?season=${nextSeason}`,
-                  `/shows/${router.query.showId}?season=${nextSeason}`
-                );
+                router.push(`/show/[showId]?season=${nextSeason}`, `/show/${router.query.showId}?season=${nextSeason}`);
               }
             }}
           />
@@ -198,8 +195,8 @@ const ShowPageA = (): JSX.Element => {
               const nextEpisode = +option.value;
               if (selectedEpisode !== nextEpisode) {
                 router.push(
-                  `/shows/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
-                  `/shows/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
+                  `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
+                  `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
                 );
               }
             }}
