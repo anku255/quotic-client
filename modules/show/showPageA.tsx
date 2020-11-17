@@ -3,7 +3,7 @@ import Router from "next/router";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard } from "./components/QuoteCard";
-import { useShowPageQuery, Show } from "@/generated/apolloHooks";
+import { useShowPageQuery, Show, useQuoteManyQuery } from "@/generated/apolloHooks";
 import { If } from "@/components/If";
 import { nullableNumber } from "@/types/index";
 
@@ -111,10 +111,20 @@ const ShowPageA = (): JSX.Element => {
   const selectedEpisode = router.query.episode ? +router.query.episode : 1;
   const [loadingQuotes, setLoadingQuotes] = useState(false);
 
-  const { data, loading, error } = useShowPageQuery({
+  const { data: showPageData, loading, error } = useShowPageQuery({
     variables: {
       showId: router.query.showId,
       quotesFilter: {
+        show: router.query.showId,
+        season: 1,
+        episode: 1,
+      },
+    },
+  });
+
+  const { data: quotesData } = useQuoteManyQuery({
+    variables: {
+      filter: {
         show: router.query.showId,
         season: selectedSeason,
         episode: selectedEpisode,
@@ -148,12 +158,12 @@ const ShowPageA = (): JSX.Element => {
   }, []);
 
   const show: ShowWithQuoteCount = {
-    ...data?.showById,
-    _id: data?.showById?._id,
-    quotesCount: data?.quoteCount,
+    ...showPageData?.showById,
+    _id: showPageData?.showById?._id,
+    quotesCount: showPageData?.quoteCount,
   };
 
-  const quotes = (data?.quoteMany ?? []).map((quote) => ({
+  const quotes = (quotesData?.quoteMany ?? []).map((quote) => ({
     id: quote?._id,
     characterName: quote?.characters?.[0]?.characterName,
     imageUrl: quote?.characters?.[0]?.coverPicture,

@@ -35,6 +35,8 @@ export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext)
       showId: ctx?.params?.showId,
       quotesFilter: {
         show: ctx?.params?.showId,
+        episode: 1,
+        season: 1,
       },
     },
   });
