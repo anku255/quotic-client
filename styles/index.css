@@ -22,6 +22,10 @@ body {
   scrollbar-width: none;
 }
 
+html {
+  background-color: #FCFDFF;
+}
+
 @media (min-width: 1300px) { 
   body {
     max-width: 1300px;

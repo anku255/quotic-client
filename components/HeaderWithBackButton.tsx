@@ -7,7 +7,12 @@ export const HeaderWithBackButton = (): JSX.Element => {
   return (
     <header className="px-4 pt-6 pb-4">
       <div className="flex justify-between items-center ">
-        <button className="text-blackRussian focus:outline-none" onClick={() => router.back()}>
+        <Link href="/">
+          <a>
+            <h1 className="text-4xl font-semibold">Quotic</h1>
+          </a>
+        </Link>
+        <button className="text-blackRussian focus:outline-none sm:hidden" onClick={() => router.back()}>
           {/* prettier-ignore */}
           <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
