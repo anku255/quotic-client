@@ -51,8 +51,15 @@ module.exports = {
         3.5: "0.875rem",
         14: "3.5rem",
         15: "3.75rem",
+        18: "4.5rem",
+        37: "9.25rem",
         42: "10.5rem",
         47: "11.5rem",
+        "90%": "90%",
+        "700-px": "700px",
+      },
+      maxWidth: {
+        "700-px": "700px",
       },
       colors: {
         zircon: "#FCFDFF",

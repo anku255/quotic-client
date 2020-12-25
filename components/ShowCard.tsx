@@ -7,7 +7,7 @@ interface ShowCardProps {
 }
 
 export const ShowCard = ({ imageUrl, name, year }: ShowCardProps): JSX.Element => (
-  <div className="w-full bg-zircon">
+  <div className="w-full h-full bg-zircon">
     <div className="w-full h-64">
       <img
         className="w-full h-full rounded-lg object-cover"

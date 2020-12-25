@@ -10,7 +10,7 @@ import { SearchField } from "@/components/SearchField";
 
 export const HomePage: React.FunctionComponent = () => {
   return (
-    <div className="px-6">
+    <div className="px-6 sm:px-37 sm:pb-8">
       <div className="h-5"></div>
       <SearchField />
       {/* TODO: Add Trending Tags */}
@@ -26,8 +26,8 @@ export const HomePage: React.FunctionComponent = () => {
       >
         {trending.map((item, i) => (
           <div
-            className={cx("flex-shrink-0", { "pr-4": i < trending.length - 1 })}
-            style={{ flexBasis: "90%", scrollSnapAlign: "start" }}
+            className={cx("flex-shrink-0 w-90% sm:w-1/3", { "pr-4": i < trending.length - 1 })}
+            style={{ scrollSnapAlign: "start" }}
             key={item.id}
           >
             <TrendingQuoteCard
@@ -48,10 +48,22 @@ export const HomePage: React.FunctionComponent = () => {
       <div className="flex flex-wrap">
         {shows.map((show) => (
           <div key={show.id} className="grid-item">
-            <ShowCard imageUrl={show.imageUrl} name={show.name} year={show.year} />
+            <div className="">
+              <ShowCard imageUrl={show.imageUrl} name={show.name} year={show.year} />
+            </div>
           </div>
         ))}
       </div>
+      <style jsx>{`
+        .grid-item {
+          width: calc(25% - 1.5rem);
+          margin-right: 2rem;
+        }
+
+        .grid-item:nth-of-type(4) {
+          margin-right: 0;
+        }
+      `}</style>
     </div>
   );
 };
