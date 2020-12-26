@@ -6,6 +6,7 @@
       "@/generated/*": ["generated/*"],
       "@/modules/*": ["modules/*"],
       "@/utils/*": ["utils/*"],
+      "@/commonHelpers/*": ["utils/commonHelpers/*"],
       "@/lib/*": ["lib/*"],
       "@/mock/*": ["mock/*"],
       "@/types/*": ["types/*"],

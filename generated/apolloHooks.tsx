@@ -1067,6 +1067,10 @@ export type Query = {
   characterMany?: Maybe<Array<Maybe<Character>>>;
   characterCount?: Maybe<Scalars['Int']>;
   searchByQuery: Array<Maybe<SearchResult>>;
+  searchCharacters: Array<Maybe<Character>>;
+  searchShows: Array<Maybe<Show>>;
+  trendingQuotes: Array<Maybe<TrendingQuote>>;
+  trendingShows: Array<Maybe<Show>>;
 };
 
 
@@ -1200,6 +1204,29 @@ export type QueryCharacterCountArgs = {
 
 export type QuerySearchByQueryArgs = {
   query: Scalars['String'];
+};
+
+
+export type QuerySearchCharactersArgs = {
+  characterName?: Maybe<Scalars['String']>;
+  realName?: Maybe<Scalars['String']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QuerySearchShowsArgs = {
+  name?: Maybe<Scalars['String']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryTrendingQuotesArgs = {
+  limit: Scalars['Int'];
+};
+
+
+export type QueryTrendingShowsArgs = {
+  limit: Scalars['Int'];
 };
 
 export type Quote = {
@@ -1435,6 +1462,12 @@ export enum SortUpdateOneUserInput {
   IdDesc = '_ID_DESC'
 }
 
+export type TrendingQuote = {
+  __typename?: 'TrendingQuote';
+  quote: Quote;
+  quotesCount: Scalars['Int'];
+};
+
 export type UpdateByIdCharacterInput = {
   characterName?: Maybe<Scalars['String']>;
   realName?: Maybe<Scalars['String']>;
@@ -1659,6 +1692,34 @@ export type GetAllCharactersQuery = (
   )>>> }
 );
 
+export type HomePageQueryVariables = Exact<{
+  quotesLimit: Scalars['Int'];
+  showsLimit: Scalars['Int'];
+}>;
+
+
+export type HomePageQuery = (
+  { __typename?: 'Query' }
+  & { trendingQuotes: Array<Maybe<(
+    { __typename?: 'TrendingQuote' }
+    & Pick<TrendingQuote, 'quotesCount'>
+    & { quote: (
+      { __typename?: 'Quote' }
+      & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
+      & { show?: Maybe<(
+        { __typename?: 'Show' }
+        & Pick<Show, '_id' | 'year' | 'name' | 'seasons' | 'genre'>
+      )>, mainCharacter?: Maybe<(
+        { __typename?: 'Character' }
+        & Pick<Character, '_id' | 'coverPicture'>
+      )> }
+    ) }
+  )>>, trendingShows: Array<Maybe<(
+    { __typename?: 'Show' }
+    & Pick<Show, '_id' | 'name' | 'year' | 'coverPicture'>
+  )>> }
+);
+
 export type GetAllQuotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1872,6 +1933,63 @@ export function useGetAllCharactersLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetAllCharactersQueryHookResult = ReturnType<typeof useGetAllCharactersQuery>;
 export type GetAllCharactersLazyQueryHookResult = ReturnType<typeof useGetAllCharactersLazyQuery>;
 export type GetAllCharactersQueryResult = Apollo.QueryResult<GetAllCharactersQuery, GetAllCharactersQueryVariables>;
+export const HomePageDocument = gql`
+    query homePage($quotesLimit: Int!, $showsLimit: Int!) {
+  trendingQuotes(limit: $quotesLimit) {
+    quote {
+      _id
+      show {
+        _id
+        year
+        name
+        seasons
+        genre
+      }
+      markup
+      season
+      episode
+      mainCharacter {
+        _id
+        coverPicture
+      }
+    }
+    quotesCount
+  }
+  trendingShows(limit: $showsLimit) {
+    _id
+    name
+    year
+    coverPicture
+  }
+}
+    `;
+
+/**
+ * __useHomePageQuery__
+ *
+ * To run a query within a React component, call `useHomePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomePageQuery({
+ *   variables: {
+ *      quotesLimit: // value for 'quotesLimit'
+ *      showsLimit: // value for 'showsLimit'
+ *   },
+ * });
+ */
+export function useHomePageQuery(baseOptions?: Apollo.QueryHookOptions<HomePageQuery, HomePageQueryVariables>) {
+        return Apollo.useQuery<HomePageQuery, HomePageQueryVariables>(HomePageDocument, baseOptions);
+      }
+export function useHomePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HomePageQuery, HomePageQueryVariables>) {
+          return Apollo.useLazyQuery<HomePageQuery, HomePageQueryVariables>(HomePageDocument, baseOptions);
+        }
+export type HomePageQueryHookResult = ReturnType<typeof useHomePageQuery>;
+export type HomePageLazyQueryHookResult = ReturnType<typeof useHomePageLazyQuery>;
+export type HomePageQueryResult = Apollo.QueryResult<HomePageQuery, HomePageQueryVariables>;
 export const GetAllQuotesDocument = gql`
     query getAllQuotes {
   quoteMany {
