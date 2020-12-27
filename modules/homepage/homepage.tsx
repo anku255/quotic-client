@@ -25,7 +25,7 @@ export const HomePage: React.FunctionComponent = () => {
   const trendingQuotes = homePageData?.trendingQuotes;
 
   return (
-    <div className="px-6 sm:px-37 sm:pb-8">
+    <div className="px-6 lg:px-37 lg:pb-8">
       <div className="h-5"></div>
       <SearchField />
       {/* TODO: Add Trending Tags */}
@@ -42,7 +42,7 @@ export const HomePage: React.FunctionComponent = () => {
         {(trendingQuotes as Array<TrendingQuote>).map(
           ({ quote: { _id, show, markup, mainCharacter }, quotesCount }, i) => (
             <div
-              className={cx("flex-shrink-0 w-90% sm:w-1/3", { "pr-4": i < ArrayMaybe(trendingQuotes).length - 1 })}
+              className={cx("flex-shrink-0 w-90% lg:w-1/3", { "pr-4": i < ArrayMaybe(trendingQuotes).length - 1 })}
               style={{ scrollSnapAlign: "start" }}
               key={_id}
             >
@@ -71,7 +71,8 @@ export const HomePage: React.FunctionComponent = () => {
             <div className="">
               <ShowCard
                 {...({
-                  imageUrl: show?.coverPicture,
+                  id: show?._id,
+                  coverPicture: show?.coverPicture,
                   name: show?.name,
                   year: show?.year,
                 } as any)}

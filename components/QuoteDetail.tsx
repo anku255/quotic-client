@@ -48,61 +48,63 @@ export const QuoteDetail = ({
         </svg>
       </div> */}
 
-      <div className="text-center">
-        <div className="text-2xl  font-semibold">{showName}</div>
-        <div className="flex justify-center font-serif text-sm text-radicalRed ">
-          <span className="">{showYear} &middot;&nbsp;</span>
-          <span className="">
-            E{episode} S{season}
-          </span>
-          {/* <span className="">23:45 min</span> */}
-        </div>
-      </div>
-
-      <div className="h-12"></div>
-      <div className="px-6 pb-12">
-        {/* Characters */}
-        <Heading>Character</Heading>
-        <div className="h-3"></div>
-        <div className="flex flex-wrap justify-between">
-          {characters.map((c) => (
-            <div key={c.characterName!} className="w-1/2">
-              <div className="font-semibold">{c.characterName}</div>
-              <div className="font-serif text-baliHai">{c.realName}</div>
-            </div>
-          ))}
-        </div>
-        <div className="h-3"></div>
-        {/* Dialogue Header */}
-        <div className="flex justify-between items-center">
-          <Heading>Dialogue</Heading>
-          <div className="pr-4">
-            <button className="p-2 mr-4 rounded-full text-baliHai">
-              {/* prettier-ignore */}
-              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                </svg>
-            </button>
-            <button className="p-2 rounded-full text-radicalRed">
-              {/* prettier-ignore */}
-              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-            </button>
+      <div className="px-6 lg:px-37">
+        <div className="text-center lg:text-left">
+          <div className="text-2xl  font-semibold">{showName}</div>
+          <div className="flex justify-center  font-serif text-sm text-radicalRed lg:justify-start lg:mt-2">
+            <span className="">{showYear} &middot;&nbsp;</span>
+            <span className="">
+              E{episode} S{season}
+            </span>
+            {/* <span className="">23:45 min</span> */}
           </div>
         </div>
 
-        <div className="h-6"></div>
-        {/* Dialogue content */}
-        <div className="quote font-serif">
-          <div dangerouslySetInnerHTML={{ __html: quote! }} />
+        <div className="h-12 lg:h-10"></div>
+        <div className="pb-12">
+          {/* Characters */}
+          <Heading>Character{characters.length > 1 ? "s" : ""}</Heading>
+          <div className="h-3"></div>
+          <div className="flex flex-wrap justify-between">
+            {characters.map((c) => (
+              <div key={c.characterName!} className="w-1/2">
+                <div className="font-semibold">{c.characterName}</div>
+                <div className="font-serif text-baliHai">{c.realName}</div>
+              </div>
+            ))}
+          </div>
+          <div className="h-3"></div>
+          {/* Dialogue Header */}
+          <div className="flex justify-between items-center">
+            <Heading>Dialogue</Heading>
+            <div className="pr-4">
+              <button className="p-2 mr-4 rounded-full text-baliHai">
+                {/* prettier-ignore */}
+                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </button>
+              <button className="p-2 rounded-full text-radicalRed">
+                {/* prettier-ignore */}
+                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="h-6"></div>
+          {/* Dialogue content */}
+          <div className="quote font-serif">
+            <div dangerouslySetInnerHTML={{ __html: quote! }} />
+          </div>
+          <style jsx global>{`
+            .quote p:not(:last-child) {
+              display: block;
+              margin-bottom: 1rem;
+            }
+          `}</style>
         </div>
-        <style jsx global>{`
-          .quote p:not(:last-child) {
-            display: block;
-            margin-bottom: 1rem;
-          }
-        `}</style>
       </div>
     </div>
   );

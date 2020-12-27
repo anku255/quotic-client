@@ -32,7 +32,7 @@ export const TrendingQuoteCard = ({
           <div className="flex-1 pr-2">
             <div className="font-serif text-sm text-radicalRed">{quotesCount} Quotes</div>
             <div className="text-2xl font-semibold leading-8">{showName}</div>
-            <div className="text-xs sm:text-sm text-baliHai">
+            <div className="text-xs lg:text-sm text-baliHai">
               <If condition={!!showYear} then={<span className="">{showYear}</span>} />
               <If condition={isNotEmptyArray(genre)} then={<span className=""> &middot; {genre?.[0]}</span>} />
               <If condition={!!seasons} then={<span className=""> &middot; {seasons} Seasons</span>} />

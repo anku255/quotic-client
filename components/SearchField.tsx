@@ -114,7 +114,7 @@ export const SearchField = (): JSX.Element => {
   const client = useApolloClient();
 
   return (
-    <div className="search-field relative  sm:mx-auto sm:max-w-700-px">
+    <div className="search-field relative  lg:mx-auto lg:max-w-700-px">
       <AutoSuggest<any>
         suggestions={suggestions}
         onSuggestionsClearRequested={() => setSuggestions([])}
@@ -140,9 +140,9 @@ export const SearchField = (): JSX.Element => {
         highlightFirstSuggestion={true}
       />
       {/* Search Icon */}
-      <div className="search-icon absolute  sm:bg-radicalRed">
+      <div className="search-icon absolute  lg:bg-radicalRed">
         {/* prettier-ignore */}
-        <svg className="w-4 h-4 text-blackRussian sm:w-8 sm:h-8 sm:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 text-blackRussian lg:w-8 lg:h-8 lg:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>

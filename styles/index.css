@@ -26,9 +26,10 @@ html {
   background-color: #FCFDFF;
 }
 
-@media (min-width: 1300px) { 
+/* 1280px = lg */
+@media (min-width: 1280px) { 
   body {
-    max-width: 1300px;
+    max-width: 1280px;
     margin: 0 auto;
   }
  }
