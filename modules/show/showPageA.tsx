@@ -176,7 +176,7 @@ const ShowPageA = (): JSX.Element => {
   if (loading) return <h1>Loading...</h1>;
 
   return (
-    <div className="px-4">
+    <div className="px-4 lg:px-37 lg:pb-8">
       <ShowDetail show={show} />
       <div className="h-8"></div>
       {/* TODO: Filters */}
