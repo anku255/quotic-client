@@ -7,6 +7,7 @@ import { TrendingQuoteCard } from "./components/TrendingShowCard";
 import { Heading } from "@/components/Typography";
 import { SearchField } from "@/components/SearchField";
 import { TrendingQuote, useHomePageQuery } from "@/generated/apolloHooks";
+import { ArrayMaybe } from "@/utils/commonHelpers";
 
 export const HomePage: React.FunctionComponent = () => {
   const { data: homePageData, loading, error } = useHomePageQuery({
@@ -41,7 +42,7 @@ export const HomePage: React.FunctionComponent = () => {
         {(trendingQuotes as Array<TrendingQuote>).map(
           ({ quote: { _id, show, markup, mainCharacter }, quotesCount }, i) => (
             <div
-              className={cx("flex-shrink-0 w-90% sm:w-1/3", { "pr-4": i < trendingQuotes.length - 1 })}
+              className={cx("flex-shrink-0 w-90% sm:w-1/3", { "pr-4": i < ArrayMaybe(trendingQuotes).length - 1 })}
               style={{ scrollSnapAlign: "start" }}
               key={_id}
             >
@@ -49,7 +50,7 @@ export const HomePage: React.FunctionComponent = () => {
                 {...({
                   quoteId: _id,
                   quotesCount: quotesCount,
-                  showName: name,
+                  showName: show?.name,
                   showYear: show?.year,
                   seasons: show?.seasons,
                   genre: show?.genre,

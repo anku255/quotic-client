@@ -2,7 +2,7 @@ import { filter, omit, path, pick } from "ramda";
 
 export const accessDeepObject = (arr: string, obj: unknown) => path(Array.isArray(arr) ? arr : arr.split("."), obj);
 
-export const ArrayMaybe = (arr: unknown) => arr || [];
+export const ArrayMaybe = (arr: any) => arr || [];
 export const ObjectMaybe = (obj: unknown) => obj || {};
 export const StringMaybe = (str: unknown) => str || "";
 
