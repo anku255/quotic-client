@@ -15,10 +15,13 @@ const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
   <div className="">
     <h1 className="text-3xl font-semibold">{show.name}</h1>
     <div className="flex font-serif text-sm text-baliHai ">
-      <span className="">{show.year} &middot;&nbsp;</span>
-      <span className="">Seasons {show.seasons} &middot;&nbsp;</span>
-      <span className="">IMDb 8.5 &middot;&nbsp;</span>
-      <span className="">{show.quotesCount} Quotes</span>
+      <If condition={!!show.year} then={<span className="">{show.year}</span>} />
+      <If condition={!!show.seasons} then={<span className="">&nbsp;&middot;&nbsp; Seasons {show.seasons}</span>} />
+      <If
+        condition={!!show.quotesCount}
+        then={<span className="">&nbsp;&middot;&nbsp;{show.quotesCount} Quotes</span>}
+      />
+      {/* <span className="">IMDb 8.5 &middot;&nbsp;</span> */}
     </div>
 
     <div className="h-6"></div>
@@ -190,7 +193,10 @@ const ShowPageA = (): JSX.Element => {
             onChange={(option) => {
               const nextSeason = +option.value;
               if (selectedSeason !== nextSeason) {
-                router.push(`/show/[showId]?season=${nextSeason}`, `/show/${router.query.showId}?season=${nextSeason}`);
+                router.replace(
+                  `/show/[showId]?season=${nextSeason}`,
+                  `/show/${router.query.showId}?season=${nextSeason}`
+                );
               }
             }}
           />
@@ -204,7 +210,7 @@ const ShowPageA = (): JSX.Element => {
             onChange={(option) => {
               const nextEpisode = +option.value;
               if (selectedEpisode !== nextEpisode) {
-                router.push(
+                router.replace(
                   `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
                   `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
                 );
