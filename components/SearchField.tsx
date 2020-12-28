@@ -114,7 +114,7 @@ export const SearchField = (): JSX.Element => {
   const client = useApolloClient();
 
   return (
-    <div className="search-field relative  lg:mx-auto lg:max-w-700-px">
+    <div className="search-field relative z-30 lg:mx-auto lg:max-w-700-px">
       <AutoSuggest<any>
         suggestions={suggestions}
         onSuggestionsClearRequested={() => setSuggestions([])}
