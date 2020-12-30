@@ -72,22 +72,46 @@ export const QuoteCard = ({
 };
 
 export const QuoteCardSkeleton = () => (
-  <ContentLoader
-    width={366}
-    speed={1}
-    viewBox="0 0 340 200"
-    className="w-full bg-white shadow-primary border border-aliceBlue rounded-lg"
-  >
-    <rect x="16" y="16" rx="5" ry="5" width="120" height="25" />
-    <rect x="16" y="50" rx="5" ry="5" width="140" height="10" />
-    <circle cx="262" cy="32" r="16" />
-    <circle cx="310" cy="32" r="16" />
-    <rect x="16" y="85" rx="2" ry="2" width="230" height="10" />
-    <rect x="16" y="100" rx="2" ry="2" width="220" height="10" />
-    <rect x="16" y="115" rx="2" ry="2" width="235" height="10" />
-    <rect x="16" y="130" rx="2" ry="2" width="232" height="10" />
-    <rect x="16" y="145" rx="2" ry="2" width="225" height="10" />
-    <rect x="16" y="160" rx="2" ry="2" width="200" height="10" />
-    <circle cx="340" cy="120" r="60" />
-  </ContentLoader>
+  <div>
+    <div className="sm:hidden">
+      <ContentLoader
+        width={366}
+        speed={1}
+        viewBox="0 0 340 200"
+        className="w-full bg-white shadow-primary border border-aliceBlue rounded-lg"
+      >
+        <rect x="16" y="16" rx="5" ry="5" width="120" height="25" />
+        <rect x="16" y="50" rx="5" ry="5" width="140" height="10" />
+        <circle cx="262" cy="32" r="16" />
+        <circle cx="310" cy="32" r="16" />
+        <rect x="16" y="85" rx="2" ry="2" width="230" height="10" />
+        <rect x="16" y="100" rx="2" ry="2" width="220" height="10" />
+        <rect x="16" y="115" rx="2" ry="2" width="235" height="10" />
+        <rect x="16" y="130" rx="2" ry="2" width="232" height="10" />
+        <rect x="16" y="145" rx="2" ry="2" width="225" height="10" />
+        <rect x="16" y="160" rx="2" ry="2" width="200" height="10" />
+        <circle cx="340" cy="120" r="60" />
+      </ContentLoader>
+    </div>
+    <div className="hidden sm:block">
+      <ContentLoader
+        width={700}
+        speed={1}
+        viewBox="0 0 700 194"
+        className="w-full bg-white shadow-primary border border-aliceBlue rounded-lg"
+      >
+        <rect x="16" y="16" rx="5" ry="5" width="120" height="25" />
+        <rect x="16" y="50" rx="5" ry="5" width="140" height="10" />
+        <circle cx="622" cy="32" r="16" />
+        <circle cx="668" cy="32" r="16" />
+        <rect x="16" y="85" rx="2" ry="2" width="430" height="10" />
+        <rect x="16" y="100" rx="2" ry="2" width="420" height="10" />
+        <rect x="16" y="115" rx="2" ry="2" width="435" height="10" />
+        <rect x="16" y="130" rx="2" ry="2" width="432" height="10" />
+        <rect x="16" y="145" rx="2" ry="2" width="425" height="10" />
+        <rect x="16" y="160" rx="2" ry="2" width="400" height="10" />
+        <circle cx="690" cy="120" r="60" />
+      </ContentLoader>
+    </div>
+  </div>
 );
