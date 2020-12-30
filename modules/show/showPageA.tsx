@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
-import { QuoteCard } from "./components/QuoteCard";
+import { QuoteCard, QuoteCardSkeleton } from "./components/QuoteCard";
 import { useShowPageQuery, Show, useQuoteManyQuery } from "@/generated/apolloHooks";
 import { If } from "@/components/If";
 import { nullableNumber } from "@/types/index";
@@ -108,6 +108,8 @@ const characterOptions = [
   { label: "Angela", value: "Angela" },
 ];
 
+const arrayOfLengthFive = new Array(5).fill(0).map((_, i) => i);
+
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
   const selectedSeason = router.query.season ? +router.query.season : 1;
@@ -133,6 +135,7 @@ const ShowPageA = (): JSX.Element => {
         episode: selectedEpisode,
       },
     },
+    fetchPolicy: "cache-only",
   });
 
   useEffect(() => {
@@ -183,70 +186,76 @@ const ShowPageA = (): JSX.Element => {
       <ShowDetail show={show} />
       <div className="h-8"></div>
       {/* TODO: Filters */}
-      <div className="flex justify-between">
-        <div className="flex-1 pr-4">
-          <SelectField
-            label="Season"
-            options={getOptions("Season", show?.episodes?.length ?? 1)}
-            placeholder="Season"
-            value={{ label: `Season ${selectedSeason}`, value: `${selectedSeason}` }}
-            onChange={(option) => {
-              const nextSeason = +option.value;
-              if (selectedSeason !== nextSeason) {
-                router.replace(
-                  `/show/[showId]?season=${nextSeason}`,
-                  `/show/${router.query.showId}?season=${nextSeason}`
-                );
-              }
-            }}
-          />
-        </div>
-        <div className="flex-1 pr-4">
-          <SelectField
-            label="Episode"
-            options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
-            placeholder="Episode"
-            value={{ label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` }}
-            onChange={(option) => {
-              const nextEpisode = +option.value;
-              if (selectedEpisode !== nextEpisode) {
-                router.replace(
-                  `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
-                  `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
-                );
-              }
-            }}
-          />
-        </div>
-        <div className="flex-1">
-          <SelectField
-            // defaultValue,
-            label="Character"
-            options={characterOptions}
-            placeholder="Character"
-            // value={}
-            // onChange={}
-          />
-        </div>
-      </div>
-      <div className="h-8"></div>
-      <If
-        condition={loadingQuotes}
-        then={<div>Loading...</div>}
-        else={quotes.map((quote) => (
-          <div key={quote.id} className="mb-4">
-            <QuoteCard
-              id={quote.id}
-              characterName={quote.characterName}
-              showYear={quote.showYear}
-              season={quote.season}
-              episode={quote.episode}
-              quote={quote.quote}
-              imageUrl={quote.imageUrl}
+      <div className="lg:max-w-700-px">
+        <div className="flex justify-between">
+          <div className="flex-1 pr-4">
+            <SelectField
+              label="Season"
+              options={getOptions("Season", show?.episodes?.length ?? 1)}
+              placeholder="Season"
+              value={{ label: `Season ${selectedSeason}`, value: `${selectedSeason}` }}
+              onChange={(option) => {
+                const nextSeason = +option.value;
+                if (selectedSeason !== nextSeason) {
+                  router.replace(
+                    `/show/[showId]?season=${nextSeason}`,
+                    `/show/${router.query.showId}?season=${nextSeason}`
+                  );
+                }
+              }}
             />
           </div>
-        ))}
-      />
+          <div className="flex-1 pr-4">
+            <SelectField
+              label="Episode"
+              options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
+              placeholder="Episode"
+              value={{ label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` }}
+              onChange={(option) => {
+                const nextEpisode = +option.value;
+                if (selectedEpisode !== nextEpisode) {
+                  router.replace(
+                    `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
+                    `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
+                  );
+                }
+              }}
+            />
+          </div>
+          <div className="flex-1">
+            <SelectField
+              // defaultValue,
+              label="Character"
+              options={characterOptions}
+              placeholder="Character"
+              // value={}
+              // onChange={}
+            />
+          </div>
+        </div>
+        <div className="h-8"></div>
+        <If
+          condition={loadingQuotes}
+          then={arrayOfLengthFive.map((i) => (
+            <div key={i} className="mb-4">
+              <QuoteCardSkeleton />
+            </div>
+          ))}
+          else={quotes.map((quote) => (
+            <div key={quote.id} className="mb-4">
+              <QuoteCard
+                id={quote.id}
+                characterName={quote.characterName}
+                showYear={quote.showYear}
+                season={quote.season}
+                episode={quote.episode}
+                quote={quote.quote}
+                imageUrl={quote.imageUrl}
+              />
+            </div>
+          ))}
+        />
+      </div>
     </div>
   );
 };
