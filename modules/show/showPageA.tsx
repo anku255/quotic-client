@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Router from "next/router";
+import React, { useState } from "react";
 import { SelectField } from "./components/SelectField";
 import { useRouter } from "next/router";
 import { QuoteCard, QuoteCardSkeleton } from "./components/QuoteCard";
@@ -112,9 +111,8 @@ const arrayOfLengthFive = new Array(5).fill(0).map((_, i) => i);
 
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
-  const selectedSeason = router.query.season ? +router.query.season : 1;
-  const selectedEpisode = router.query.episode ? +router.query.episode : 1;
-  const [loadingQuotes, setLoadingQuotes] = useState(false);
+  const [selectedSeason, setSelectedSeason] = useState<number>(router.query.season ? +router.query.season : 1);
+  const [selectedEpisode, setSelectedEpisode] = useState<number>(router.query.episode ? +router.query.episode : 1);
 
   const { data: showPageData, loading, error } = useShowPageQuery({
     variables: {
@@ -127,7 +125,7 @@ const ShowPageA = (): JSX.Element => {
     },
   });
 
-  const { data: quotesData } = useQuoteManyQuery({
+  const { data: quotesData, loading: quoteManyLoading } = useQuoteManyQuery({
     variables: {
       filter: {
         show: router.query.showId,
@@ -135,33 +133,7 @@ const ShowPageA = (): JSX.Element => {
         episode: selectedEpisode,
       },
     },
-    fetchPolicy: "cache-only",
   });
-
-  useEffect(() => {
-    const handleRouteChangeStart = (nextUrl: string) => {
-      const { host, protocol, pathname } = window.location;
-      const url = new URL(`${protocol}//${host}${nextUrl}`);
-      const isShowPage = url.pathname === pathname;
-      if (isShowPage) {
-        setLoadingQuotes(true);
-      }
-    };
-
-    const handleRouteChangeComplete = () => {
-      setLoadingQuotes(false);
-    };
-
-    Router.events.on("routeChangeStart", handleRouteChangeStart);
-    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
-    Router.events.on("routeChangeError", handleRouteChangeComplete);
-
-    return () => {
-      Router.events.off("routeChangeStart", handleRouteChangeStart);
-      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
-      Router.events.off("routeChangeError", handleRouteChangeComplete);
-    };
-  }, []);
 
   const show: ShowWithQuoteCount = {
     ...showPageData?.showById,
@@ -199,8 +171,10 @@ const ShowPageA = (): JSX.Element => {
                 if (selectedSeason !== nextSeason) {
                   router.replace(
                     `/show/[showId]?season=${nextSeason}`,
-                    `/show/${router.query.showId}?season=${nextSeason}`
+                    `/show/${router.query.showId}?season=${nextSeason}`,
+                    { shallow: true }
                   );
+                  setSelectedSeason(nextSeason);
                 }
               }}
             />
@@ -216,8 +190,10 @@ const ShowPageA = (): JSX.Element => {
                 if (selectedEpisode !== nextEpisode) {
                   router.replace(
                     `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
-                    `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`
+                    `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`,
+                    { shallow: true }
                   );
+                  setSelectedEpisode(nextEpisode);
                 }
               }}
             />
@@ -235,7 +211,7 @@ const ShowPageA = (): JSX.Element => {
         </div>
         <div className="h-8"></div>
         <If
-          condition={loadingQuotes}
+          condition={quoteManyLoading}
           then={arrayOfLengthFive.map((i) => (
             <div key={i} className="mb-4">
               <QuoteCardSkeleton />
