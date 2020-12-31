@@ -1,13 +1,42 @@
 import React, { useState } from "react";
-import { SelectField } from "./components/SelectField";
-import { useRouter } from "next/router";
+import { useApolloClient } from "@apollo/client";
+import { SelectField, AsyncSelectField } from "./components/SelectField";
+import { NextRouter, useRouter } from "next/router";
 import { QuoteCard, QuoteCardSkeleton } from "./components/QuoteCard";
 import { useShowPageQuery, Show, useQuoteManyQuery } from "@/generated/apolloHooks";
 import { If } from "@/components/If";
 import { nullableNumber } from "@/types/index";
+import { SEARCH_CHARACTERS_QUERY } from "@/graphql/queries/characters.queries";
+import { ApolloClient } from "@apollo/client";
+import { stringifyQueryParams } from "@/utils/commonHelpers";
 
 interface ShowWithQuoteCount extends Show {
   quotesCount?: nullableNumber;
+}
+
+interface IGenericOption {
+  label: string;
+  value: string;
+}
+
+interface ICharacterOption extends IGenericOption {
+  coverPicture?: string;
+}
+
+async function fetchCharacters(
+  client: ApolloClient<Record<string, unknown>>,
+  query: string
+): Promise<ICharacterOption[]> {
+  const res = await client.query({
+    query: SEARCH_CHARACTERS_QUERY,
+    variables: { characterName: query, limit: 10 },
+  });
+  const characters = res.data?.searchCharacters ?? [];
+  return characters.map((c: any) => ({
+    label: c.characterName,
+    value: c._id,
+    coverPicture: c.coverPicture,
+  }));
 }
 
 const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
@@ -100,27 +129,47 @@ const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
 const getOptions = (labelPrefix: string, count: number) =>
   new Array(count).fill(0).map((_, i) => ({ label: `${labelPrefix} ${i + 1}`, value: `${i + 1}` }));
 
-const characterOptions = [
-  { label: "Elliot Alderson", value: "Elliot Alderson" },
-  { label: "Darlene", value: "Darlene" },
-  { label: "Mr. Robot", value: "Mr. Robot" },
-  { label: "Angela", value: "Angela" },
-];
+/**
+ *
+ * @param router Router
+ * @param queryParams
+ * @returns void
+ * Updates the URL with the given query params
+ */
+const updateUrl = (router: NextRouter, queryParams: { [key: string]: string }): void => {
+  router.replace(
+    `/show/[showId]${stringifyQueryParams(queryParams)}`,
+    `/show/${router.query.showId}${stringifyQueryParams(queryParams)}`,
+    { shallow: true }
+  );
+};
 
 const arrayOfLengthFive = new Array(5).fill(0).map((_, i) => i);
 
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
-  const [selectedSeason, setSelectedSeason] = useState<number>(router.query.season ? +router.query.season : 1);
-  const [selectedEpisode, setSelectedEpisode] = useState<number>(router.query.episode ? +router.query.episode : 1);
+  const client = useApolloClient();
+
+  const { season, episode, characterName, characterId, showId } = router.query;
+
+  console.log("episode", episode);
+  const [selectedSeason, setSelectedSeason] = useState<number>(season ? +season : 1);
+  const [selectedEpisode, setSelectedEpisode] = useState<number | undefined>(episode ? +episode : 1);
+  const [selectedCharacter, setSelectedCharacter] = useState<IGenericOption | undefined>(
+    characterName && characterId ? { label: characterName as string, value: characterId as string } : undefined
+  );
 
   const { data: showPageData, loading, error } = useShowPageQuery({
     variables: {
-      showId: router.query.showId,
+      showId: showId,
       quotesFilter: {
-        show: router.query.showId,
-        season: 1,
-        episode: 1,
+        show: showId,
+        season: selectedSeason,
+        episode: selectedEpisode,
+        ...(selectedCharacter && { characters: [selectedCharacter.value] }),
+        // season: 1,
+        // episode: 1,
+        // ...(selectedCharacter && { characters: [selectedCharacter.value] }),
       },
     },
   });
@@ -128,9 +177,10 @@ const ShowPageA = (): JSX.Element => {
   const { data: quotesData, loading: quoteManyLoading } = useQuoteManyQuery({
     variables: {
       filter: {
-        show: router.query.showId,
+        show: showId,
         season: selectedSeason,
         episode: selectedEpisode,
+        ...(selectedCharacter && { characters: [selectedCharacter.value] }),
       },
     },
   });
@@ -169,11 +219,7 @@ const ShowPageA = (): JSX.Element => {
               onChange={(option) => {
                 const nextSeason = +option.value;
                 if (selectedSeason !== nextSeason) {
-                  router.replace(
-                    `/show/[showId]?season=${nextSeason}`,
-                    `/show/${router.query.showId}?season=${nextSeason}`,
-                    { shallow: true }
-                  );
+                  updateUrl(router, { season: nextSeason.toString() });
                   setSelectedSeason(nextSeason);
                 }
               }}
@@ -184,28 +230,46 @@ const ShowPageA = (): JSX.Element => {
               label="Episode"
               options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
               placeholder="Episode"
-              value={{ label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` }}
+              isClearable
+              value={selectedEpisode ? { label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` } : undefined}
               onChange={(option) => {
-                const nextEpisode = +option.value;
-                if (selectedEpisode !== nextEpisode) {
-                  router.replace(
-                    `/show/[showId]?season=${selectedSeason}&episode=${nextEpisode}`,
-                    `/show/${router.query.showId}?season=${selectedSeason}&episode=${nextEpisode}`,
-                    { shallow: true }
-                  );
-                  setSelectedEpisode(nextEpisode);
+                if (!option) {
+                  updateUrl(router, { season: selectedSeason.toString() });
+                  setSelectedEpisode(undefined);
+                } else {
+                  const nextEpisode = +option.value;
+                  if (selectedEpisode !== nextEpisode) {
+                    updateUrl(router, { season: selectedSeason.toString(), episode: nextEpisode.toString() });
+                    setSelectedEpisode(nextEpisode);
+                  }
                 }
               }}
             />
           </div>
           <div className="flex-1">
-            <SelectField
-              // defaultValue,
+            <AsyncSelectField
               label="Character"
-              options={characterOptions}
+              fetchOptions={({ query }) => fetchCharacters(client as any, query)}
+              value={selectedCharacter}
               placeholder="Character"
-              // value={}
-              // onChange={}
+              isClearable
+              onChange={(option: ICharacterOption | undefined) => {
+                if (!option) {
+                  updateUrl(router, {
+                    season: selectedSeason.toString(),
+                    ...(selectedEpisode && { episode: selectedEpisode.toString() }),
+                  });
+                  setSelectedCharacter(undefined);
+                } else {
+                  updateUrl(router, {
+                    season: selectedSeason.toString(),
+                    ...(selectedEpisode && { episode: selectedEpisode.toString() }),
+                    characterName: option.label,
+                    characterId: option.value,
+                  });
+                  setSelectedCharacter(option);
+                }
+              }}
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 
 const CustomDropdownIndicator = ({ isFocused }: { isFocused: boolean }) => {
@@ -27,17 +27,122 @@ interface Option {
 interface SelectProps {
   defaultValue?: Option;
   value?: Option | undefined;
+  isClearable?: boolean;
   label: string;
   options: Array<Option>;
   placeholder: string;
   onChange?: (o: Option) => void;
 }
 
+const SelectStyles = () => (
+  <style jsx global>{`
+    :root {
+      --zircon: #fcfdff;
+      --baliHai: #869bb3;
+      --blackRussian: #000024;
+      --aliceBlue: #eff7ff;
+      --baliHai-50: #869bb31a;
+      --radicalRed: #fc2d52;
+      --white: white;
+      --shadow: 0px 10px 20px #0000241a;
+    }
+
+    .react-select {
+      height: 35px;
+    }
+
+    .react-select .react-select__control {
+      border: none;
+      border-radius: 8px;
+      background: var(--aliceBlue);
+      box-shadow: none;
+      color: var(--white);
+    }
+
+    .react-select .react-select__control--is-focused {
+      border: none;
+      border-radius: 8px;
+      background: var(--baliHai);
+    }
+
+    .react-select .react-select__indicator-separator {
+      display: none;
+    }
+
+    .react-select__input {
+      color: var(--white);
+    }
+
+    .react-select__control--is-focused .react-select__single-value {
+      color: var(--white);
+    }
+
+    .react-select__placeholder,
+    .react-select__single-value {
+      color: var(--baliHai);
+      font-size: 12px;
+      letter-spacing: 1.2px;
+      line-height: 18;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .react-select__control--is-focused .react-select__placeholder {
+      color: var(--white);
+    }
+
+    .react-select__control--is-focused .react-select__single-value {
+      color: var(--white);
+    }
+
+    .react-select__indicator.react-select__dropdown-indicator {
+      color: var(--baliHai);
+    }
+
+    .react-select__control--is-focused .react-select__dropdown-indicator {
+      color: var(--white);
+    }
+
+    .react-select__menu {
+      box-shadow: var(--shadow);
+    }
+
+    .react-select__menu .react-select__menu-list {
+      padding: 0;
+    }
+
+    .react-select__option {
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .react-select__option:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .react-select__option:last-child {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .react-select__option .react-select__option--is-focused {
+      background: var(--aliceBlue);
+    }
+
+    .react-select__option.react-select__option--is-selected {
+      background: var(--baliHai);
+      color: var(--white);
+    }
+  `}</style>
+);
+
 export const SelectField = ({
   defaultValue,
   label,
   options,
   placeholder,
+  isClearable,
   value,
   onChange,
 }: SelectProps): JSX.Element => {
@@ -49,111 +154,50 @@ export const SelectField = ({
         label={label}
         options={options}
         value={value}
+        isClearable={isClearable}
         onChange={onChange as any}
         classNamePrefix="react-select"
         className="react-select"
         components={{ DropdownIndicator: CustomDropdownIndicator }}
       />
-      <style jsx global>{`
-        :root {
-          --zircon: #fcfdff;
-          --baliHai: #869bb3;
-          --blackRussian: #000024;
-          --aliceBlue: #eff7ff;
-          --baliHai-50: #869bb31a;
-          --radicalRed: #fc2d52;
-          --white: white;
-          --shadow: 0px 10px 20px #0000241a;
-        }
+      <SelectStyles />
+    </div>
+  );
+};
 
-        .react-select {
-          height: 35px;
-        }
+type AsyncSelectProps = Omit<SelectProps, "options"> & {
+  fetchOptions: ({ query }: { query: string }) => Promise<Array<unknown>>;
+};
 
-        .react-select .react-select__control {
-          border: none;
-          border-radius: 8px;
-          background: var(--aliceBlue);
-          box-shadow: none;
-          color: var(--white);
-        }
+export const AsyncSelectField = ({
+  defaultValue,
+  label,
+  placeholder,
+  value,
+  onChange,
+  isClearable,
+  fetchOptions,
+}: AsyncSelectProps): JSX.Element => {
+  const [selectOptions, setSelectOptions] = useState([]);
 
-        .react-select .react-select__control--is-focused {
-          border: none;
-          border-radius: 8px;
-          background: var(--baliHai);
-        }
-
-        .react-select .react-select__indicator-separator {
-          display: none;
-        }
-
-        .react-select__input {
-          color: var(--white);
-        }
-
-        .react-select__control--is-focused .react-select__single-value {
-          color: var(--white);
-        }
-
-        .react-select__placeholder,
-        .react-select__single-value {
-          color: var(--baliHai);
-          font-size: 12px;
-          letter-spacing: 1.2px;
-          line-height: 18;
-          text-transform: uppercase;
-          font-weight: bold;
-        }
-
-        .react-select__control--is-focused .react-select__placeholder {
-          color: var(--white);
-        }
-
-        .react-select__control--is-focused .react-select__single-value {
-          color: var(--white);
-        }
-
-        .react-select__indicator.react-select__dropdown-indicator {
-          color: var(--baliHai);
-        }
-
-        .react-select__control--is-focused .react-select__dropdown-indicator {
-          color: var(--white);
-        }
-
-        .react-select__menu {
-          box-shadow: var(--shadow);
-        }
-
-        .react-select__menu .react-select__menu-list {
-          padding: 0;
-        }
-
-        .react-select__option {
-          padding: 10px 0;
-          text-align: center;
-        }
-
-        .react-select__option:first-child {
-          border-top-left-radius: 8px;
-          border-top-right-radius: 8px;
-        }
-
-        .react-select__option:last-child {
-          border-bottom-left-radius: 8px;
-          border-bottom-right-radius: 8px;
-        }
-
-        .react-select__option .react-select__option--is-focused {
-          background: var(--aliceBlue);
-        }
-
-        .react-select__option.react-select__option--is-selected {
-          background: var(--baliHai);
-          color: var(--white);
-        }
-      `}</style>
+  return (
+    <div className="">
+      <Select
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        label={label}
+        options={selectOptions}
+        value={value}
+        onChange={onChange as any}
+        isClearable={isClearable}
+        classNamePrefix="react-select"
+        className="react-select"
+        components={{ DropdownIndicator: CustomDropdownIndicator }}
+        onInputChange={(query) => {
+          fetchOptions({ query }).then((options: any) => setSelectOptions(options));
+        }}
+      />
+      <SelectStyles />
     </div>
   );
 };

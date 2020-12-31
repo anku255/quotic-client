@@ -4,6 +4,7 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/generated/*": ["generated/*"],
+      "@/graphql/*": ["graphql/*"],
       "@/modules/*": ["modules/*"],
       "@/utils/*": ["utils/*"],
       "@/commonHelpers/*": ["utils/commonHelpers/*"],
