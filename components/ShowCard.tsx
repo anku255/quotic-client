@@ -3,13 +3,14 @@ import React from "react";
 
 interface ShowCardProps {
   id: string;
+  showType: "SERIES" | "MOVIE";
   coverPicture: string;
   name: string;
   year: number;
 }
 
-export const ShowCard = ({ id, coverPicture, name, year }: ShowCardProps): JSX.Element => (
-  <Link href={`/show/[showId]`} as={`/show/${id}`} shallow>
+export const ShowCard = ({ id, coverPicture, name, year, showType }: ShowCardProps): JSX.Element => (
+  <Link href={`/show/[showId]/[showType]`} as={`/show/${id}/${showType.toLowerCase()}`} shallow>
     <a className="block">
       <div className="w-full h-full bg-zircon">
         <div className="w-full relative image">

@@ -29,6 +29,7 @@ export const HOME_PAGE_QUERY = gql`
       name
       year
       coverPicture
+      type
     }
   }
 `;

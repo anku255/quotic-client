@@ -1,7 +1,6 @@
 import React from "react";
 import cx from "classnames";
 
-import trending from "@/mock/trending.json";
 import { ShowCard } from "@/components/ShowCard";
 import { TrendingQuoteCard } from "./components/TrendingShowCard";
 import { Heading } from "@/components/Typography";
@@ -77,6 +76,7 @@ export const HomePage: React.FunctionComponent = () => {
                   coverPicture: show?.coverPicture,
                   name: show?.name,
                   year: show?.year,
+                  showType: show?.type,
                 } as any)}
               />
             </div>

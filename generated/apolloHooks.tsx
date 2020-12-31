@@ -315,7 +315,6 @@ export type CreateOneShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -418,7 +417,6 @@ export type FilterFindManyShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -493,7 +491,6 @@ export type FilterFindOneShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -589,7 +586,6 @@ export type FilterRemoveOneShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -625,7 +621,6 @@ export type FilterShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -686,7 +681,6 @@ export type FilterUpdateOneShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -1336,13 +1330,13 @@ export type Show = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodes>>>;
-  characters?: Maybe<Array<Maybe<Character>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
   _id: Scalars['MongoID'];
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
+  characters?: Maybe<Array<Maybe<Character>>>;
 };
 
 
@@ -1521,7 +1515,6 @@ export type UpdateByIdShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -1606,7 +1599,6 @@ export type UpdateOneShowInput = {
   year?: Maybe<Scalars['Float']>;
   seasons?: Maybe<Scalars['Float']>;
   episodes?: Maybe<Array<Maybe<ShowEpisodesInput>>>;
-  characters?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
   coverPicture?: Maybe<Scalars['String']>;
   imdbLink?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
@@ -1679,17 +1671,19 @@ export type CreateManyQuotesMutation = (
   )> }
 );
 
-export type GetAllCharactersQueryVariables = Exact<{
-  filter?: Maybe<FilterFindManyCharacterInput>;
+export type SearchCharactersQueryVariables = Exact<{
+  realName?: Maybe<Scalars['String']>;
+  characterName?: Maybe<Scalars['String']>;
+  limit?: Maybe<Scalars['Int']>;
 }>;
 
 
-export type GetAllCharactersQuery = (
+export type SearchCharactersQuery = (
   { __typename?: 'Query' }
-  & { characterMany?: Maybe<Array<Maybe<(
+  & { searchCharacters: Array<Maybe<(
     { __typename?: 'Character' }
     & Pick<Character, '_id' | 'characterName' | 'coverPicture'>
-  )>>> }
+  )>> }
 );
 
 export type HomePageQueryVariables = Exact<{
@@ -1716,7 +1710,7 @@ export type HomePageQuery = (
     ) }
   )>>, trendingShows: Array<Maybe<(
     { __typename?: 'Show' }
-    & Pick<Show, '_id' | 'name' | 'year' | 'coverPicture'>
+    & Pick<Show, '_id' | 'name' | 'year' | 'coverPicture' | 'type'>
   )>> }
 );
 
@@ -1898,9 +1892,9 @@ export function useCreateManyQuotesMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateManyQuotesMutationHookResult = ReturnType<typeof useCreateManyQuotesMutation>;
 export type CreateManyQuotesMutationResult = Apollo.MutationResult<CreateManyQuotesMutation>;
 export type CreateManyQuotesMutationOptions = Apollo.BaseMutationOptions<CreateManyQuotesMutation, CreateManyQuotesMutationVariables>;
-export const GetAllCharactersDocument = gql`
-    query getAllCharacters($filter: FilterFindManyCharacterInput) {
-  characterMany(filter: $filter) {
+export const SearchCharactersDocument = gql`
+    query searchCharacters($realName: String, $characterName: String, $limit: Int) {
+  searchCharacters(realName: $realName, characterName: $characterName, limit: $limit) {
     _id
     characterName
     coverPicture
@@ -1909,30 +1903,32 @@ export const GetAllCharactersDocument = gql`
     `;
 
 /**
- * __useGetAllCharactersQuery__
+ * __useSearchCharactersQuery__
  *
- * To run a query within a React component, call `useGetAllCharactersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllCharactersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchCharactersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCharactersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllCharactersQuery({
+ * const { data, loading, error } = useSearchCharactersQuery({
  *   variables: {
- *      filter: // value for 'filter'
+ *      realName: // value for 'realName'
+ *      characterName: // value for 'characterName'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useGetAllCharactersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCharactersQuery, GetAllCharactersQueryVariables>) {
-        return Apollo.useQuery<GetAllCharactersQuery, GetAllCharactersQueryVariables>(GetAllCharactersDocument, baseOptions);
+export function useSearchCharactersQuery(baseOptions?: Apollo.QueryHookOptions<SearchCharactersQuery, SearchCharactersQueryVariables>) {
+        return Apollo.useQuery<SearchCharactersQuery, SearchCharactersQueryVariables>(SearchCharactersDocument, baseOptions);
       }
-export function useGetAllCharactersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCharactersQuery, GetAllCharactersQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllCharactersQuery, GetAllCharactersQueryVariables>(GetAllCharactersDocument, baseOptions);
+export function useSearchCharactersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCharactersQuery, SearchCharactersQueryVariables>) {
+          return Apollo.useLazyQuery<SearchCharactersQuery, SearchCharactersQueryVariables>(SearchCharactersDocument, baseOptions);
         }
-export type GetAllCharactersQueryHookResult = ReturnType<typeof useGetAllCharactersQuery>;
-export type GetAllCharactersLazyQueryHookResult = ReturnType<typeof useGetAllCharactersLazyQuery>;
-export type GetAllCharactersQueryResult = Apollo.QueryResult<GetAllCharactersQuery, GetAllCharactersQueryVariables>;
+export type SearchCharactersQueryHookResult = ReturnType<typeof useSearchCharactersQuery>;
+export type SearchCharactersLazyQueryHookResult = ReturnType<typeof useSearchCharactersLazyQuery>;
+export type SearchCharactersQueryResult = Apollo.QueryResult<SearchCharactersQuery, SearchCharactersQueryVariables>;
 export const HomePageDocument = gql`
     query homePage($quotesLimit: Int!, $showsLimit: Int!) {
   trendingQuotes(limit: $quotesLimit) {
@@ -1960,6 +1956,7 @@ export const HomePageDocument = gql`
     name
     year
     coverPicture
+    type
   }
 }
     `;
