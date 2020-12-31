@@ -1793,14 +1793,13 @@ export type GetAllShowsQuery = (
   )>>> }
 );
 
-export type ShowPageQueryVariables = Exact<{
+export type ShowDetailsQueryVariables = Exact<{
   showId: Scalars['MongoID'];
-  quotesFilter?: Maybe<FilterFindManyQuoteInput>;
   quoteCountFilter?: Maybe<FilterQuoteInput>;
 }>;
 
 
-export type ShowPageQuery = (
+export type ShowDetailsQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'quoteCount'>
   & { showById?: Maybe<(
@@ -1810,7 +1809,17 @@ export type ShowPageQuery = (
       { __typename?: 'ShowEpisodes' }
       & Pick<ShowEpisodes, 'season' | 'episodes'>
     )>>> }
-  )>, quoteMany?: Maybe<Array<Maybe<(
+  )> }
+);
+
+export type QuotesByShowQueryVariables = Exact<{
+  quotesFilter?: Maybe<FilterFindManyQuoteInput>;
+}>;
+
+
+export type QuotesByShowQuery = (
+  { __typename?: 'Query' }
+  & { quoteMany?: Maybe<Array<Maybe<(
     { __typename?: 'Quote' }
     & Pick<Quote, '_id' | 'markup' | 'season' | 'episode'>
     & { show?: Maybe<(
@@ -2189,8 +2198,8 @@ export function useGetAllShowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAllShowsQueryHookResult = ReturnType<typeof useGetAllShowsQuery>;
 export type GetAllShowsLazyQueryHookResult = ReturnType<typeof useGetAllShowsLazyQuery>;
 export type GetAllShowsQueryResult = Apollo.QueryResult<GetAllShowsQuery, GetAllShowsQueryVariables>;
-export const ShowPageDocument = gql`
-    query showPage($showId: MongoID!, $quotesFilter: FilterFindManyQuoteInput, $quoteCountFilter: FilterQuoteInput) {
+export const ShowDetailsDocument = gql`
+    query showDetails($showId: MongoID!, $quoteCountFilter: FilterQuoteInput) {
   showById(_id: $showId) {
     _id
     name
@@ -2206,6 +2215,38 @@ export const ShowPageDocument = gql`
       episodes
     }
   }
+  quoteCount(filter: $quoteCountFilter)
+}
+    `;
+
+/**
+ * __useShowDetailsQuery__
+ *
+ * To run a query within a React component, call `useShowDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShowDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShowDetailsQuery({
+ *   variables: {
+ *      showId: // value for 'showId'
+ *      quoteCountFilter: // value for 'quoteCountFilter'
+ *   },
+ * });
+ */
+export function useShowDetailsQuery(baseOptions?: Apollo.QueryHookOptions<ShowDetailsQuery, ShowDetailsQueryVariables>) {
+        return Apollo.useQuery<ShowDetailsQuery, ShowDetailsQueryVariables>(ShowDetailsDocument, baseOptions);
+      }
+export function useShowDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShowDetailsQuery, ShowDetailsQueryVariables>) {
+          return Apollo.useLazyQuery<ShowDetailsQuery, ShowDetailsQueryVariables>(ShowDetailsDocument, baseOptions);
+        }
+export type ShowDetailsQueryHookResult = ReturnType<typeof useShowDetailsQuery>;
+export type ShowDetailsLazyQueryHookResult = ReturnType<typeof useShowDetailsLazyQuery>;
+export type ShowDetailsQueryResult = Apollo.QueryResult<ShowDetailsQuery, ShowDetailsQueryVariables>;
+export const QuotesByShowDocument = gql`
+    query quotesByShow($quotesFilter: FilterFindManyQuoteInput) {
   quoteMany(filter: $quotesFilter) {
     _id
     show {
@@ -2221,34 +2262,31 @@ export const ShowPageDocument = gql`
       characterName
     }
   }
-  quoteCount(filter: $quoteCountFilter)
 }
     `;
 
 /**
- * __useShowPageQuery__
+ * __useQuotesByShowQuery__
  *
- * To run a query within a React component, call `useShowPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useShowPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useQuotesByShowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuotesByShowQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useShowPageQuery({
+ * const { data, loading, error } = useQuotesByShowQuery({
  *   variables: {
- *      showId: // value for 'showId'
  *      quotesFilter: // value for 'quotesFilter'
- *      quoteCountFilter: // value for 'quoteCountFilter'
  *   },
  * });
  */
-export function useShowPageQuery(baseOptions?: Apollo.QueryHookOptions<ShowPageQuery, ShowPageQueryVariables>) {
-        return Apollo.useQuery<ShowPageQuery, ShowPageQueryVariables>(ShowPageDocument, baseOptions);
+export function useQuotesByShowQuery(baseOptions?: Apollo.QueryHookOptions<QuotesByShowQuery, QuotesByShowQueryVariables>) {
+        return Apollo.useQuery<QuotesByShowQuery, QuotesByShowQueryVariables>(QuotesByShowDocument, baseOptions);
       }
-export function useShowPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShowPageQuery, ShowPageQueryVariables>) {
-          return Apollo.useLazyQuery<ShowPageQuery, ShowPageQueryVariables>(ShowPageDocument, baseOptions);
+export function useQuotesByShowLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuotesByShowQuery, QuotesByShowQueryVariables>) {
+          return Apollo.useLazyQuery<QuotesByShowQuery, QuotesByShowQueryVariables>(QuotesByShowDocument, baseOptions);
         }
-export type ShowPageQueryHookResult = ReturnType<typeof useShowPageQuery>;
-export type ShowPageLazyQueryHookResult = ReturnType<typeof useShowPageLazyQuery>;
-export type ShowPageQueryResult = Apollo.QueryResult<ShowPageQuery, ShowPageQueryVariables>;
+export type QuotesByShowQueryHookResult = ReturnType<typeof useQuotesByShowQuery>;
+export type QuotesByShowLazyQueryHookResult = ReturnType<typeof useQuotesByShowLazyQuery>;
+export type QuotesByShowQueryResult = Apollo.QueryResult<QuotesByShowQuery, QuotesByShowQueryVariables>;

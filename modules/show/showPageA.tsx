@@ -3,7 +3,7 @@ import { useApolloClient } from "@apollo/client";
 import { SelectField, AsyncSelectField } from "./components/SelectField";
 import { NextRouter, useRouter } from "next/router";
 import { QuoteCard, QuoteCardSkeleton } from "./components/QuoteCard";
-import { useShowPageQuery, Show, useQuoteManyQuery } from "@/generated/apolloHooks";
+import { useShowDetailsQuery, Show, useQuoteManyQuery } from "@/generated/apolloHooks";
 import { If } from "@/components/If";
 import { nullableNumber } from "@/types/index";
 import { SEARCH_CHARACTERS_QUERY } from "@/graphql/queries/characters.queries";
@@ -160,15 +160,10 @@ const ShowPageA = (): JSX.Element => {
     characterName && characterId ? { label: characterName as string, value: characterId as string } : undefined
   );
 
-  const { data: showPageData, loading, error } = useShowPageQuery({
+  const { data: showPageData, loading, error } = useShowDetailsQuery({
     variables: {
       showId: showId,
-      quotesFilter: {
-        show: showId,
-        season: selectedSeason,
-        episode: selectedEpisode,
-        ...(selectedCharacter && { characters: [selectedCharacter.value] }),
-      },
+      quoteCountFilter: { show: showId },
     },
   });
 

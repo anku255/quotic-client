@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { initializeApollo } from "@/lib/apolloClient";
 import ShowDetailPage from "@/modules/show";
 import { HeaderWithBackButton } from "@/components/HeaderWithBackButton";
-import { SHOW_PAGE_QUERY } from "@/modules/show/show.gql";
+import { SHOW_DETAIL_QUERY, QUOTES_BY_SHOW_QUERY } from "@/modules/show/show.gql";
 import { ObjectMaybe } from "@/utils/commonHelpers";
 
 const ShowPage = (): JSX.Element => {
@@ -57,10 +57,19 @@ export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext)
 
   const { showId, season, episode } = ObjectMaybe(ctx.params);
 
-  await apolloClient.query({
-    query: SHOW_PAGE_QUERY,
+  const showDetailPromise = apolloClient.query({
+    query: SHOW_DETAIL_QUERY,
     variables: {
       showId: showId,
+      quoteCountFilter: {
+        show: showId,
+      },
+    },
+  });
+
+  const quotesByShowPromise = apolloClient.query({
+    query: QUOTES_BY_SHOW_QUERY,
+    variables: {
       quotesFilter: {
         show: showId,
         episode: episode ? +episode : undefined,
@@ -68,6 +77,8 @@ export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext)
       },
     },
   });
+
+  await Promise.all([showDetailPromise, quotesByShowPromise]);
 
   return {
     props: {
