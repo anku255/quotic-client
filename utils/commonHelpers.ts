@@ -4,7 +4,7 @@ import queryString from "query-string";
 export const accessDeepObject = (arr: string, obj: unknown) => path(Array.isArray(arr) ? arr : arr.split("."), obj);
 
 export const ArrayMaybe = (arr: any) => arr || [];
-export const ObjectMaybe = (obj: unknown) => obj || {};
+export const ObjectMaybe = (obj: any) => obj || {};
 export const StringMaybe = (str: unknown) => str || "";
 
 export const pickWrapper = (keys: string[], object: unknown) => pick(keys, object);

@@ -1,0 +1,78 @@
+import React from "react";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import { initializeApollo } from "@/lib/apolloClient";
+import ShowDetailPage from "@/modules/show";
+import { HeaderWithBackButton } from "@/components/HeaderWithBackButton";
+import { SHOW_PAGE_QUERY } from "@/modules/show/show.gql";
+import { ObjectMaybe } from "@/utils/commonHelpers";
+
+const ShowPage = (): JSX.Element => {
+  return <ShowDetailPage />;
+};
+
+// Header is needed for ShowPageA variant
+ShowPage.Header = HeaderWithBackButton;
+
+// ShowPage.Header = () => null;
+ShowPage.title = "Show";
+
+export default ShowPage;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { showId: "5e779b7e5da3d982f7515c01", showType: "series", season: "1", episode: "1" } }, // See the "paths" section below
+    ],
+    fallback: "blocking",
+  };
+};
+
+// export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const apolloClient = initializeApollo();
+
+//   const { showId, characterId, characterName, episode, season } = ctx.query;
+//   await apolloClient.query({
+//     query: SHOW_PAGE_QUERY,
+//     variables: {
+//       showId: showId,
+//       quotesFilter: {
+//         show: showId,
+//         episode: episode ? +episode : undefined,
+//         season: season ? +season : undefined,
+//         ...(characterName && characterId && { characters: [characterId] }),
+//       },
+//     },
+//   });
+
+//   return {
+//     props: {
+//       initialApolloState: apolloClient.cache.extract(),
+//     },
+//     // revalidate: 1,
+//   };
+// };
+
+export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext) => {
+  const apolloClient = initializeApollo();
+
+  const { showId, season, episode } = ObjectMaybe(ctx.params);
+
+  await apolloClient.query({
+    query: SHOW_PAGE_QUERY,
+    variables: {
+      showId: showId,
+      quotesFilter: {
+        show: showId,
+        episode: episode ? +episode : undefined,
+        season: season ? +season : undefined,
+      },
+    },
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+    revalidate: 1,
+  };
+};

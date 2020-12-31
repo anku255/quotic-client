@@ -137,9 +137,11 @@ const getOptions = (labelPrefix: string, count: number) =>
  * Updates the URL with the given query params
  */
 const updateUrl = (router: NextRouter, queryParams: { [key: string]: string }): void => {
+  const { showId, showType } = router.query;
+  const { season, episode, ...restOfQP } = queryParams;
   router.replace(
-    `/show/[showId]${stringifyQueryParams(queryParams)}`,
-    `/show/${router.query.showId}${stringifyQueryParams(queryParams)}`,
+    `/show/[showId]/[showType]/s/[season]/e/[episode]${stringifyQueryParams(restOfQP)}`,
+    `/show/${showId}/${showType}/s/${season}/e/${episode}${stringifyQueryParams(restOfQP)}`,
     { shallow: true }
   );
 };
@@ -150,9 +152,8 @@ const ShowPageA = (): JSX.Element => {
   const router = useRouter();
   const client = useApolloClient();
 
-  const { season, episode, characterName, characterId, showId } = router.query;
+  const { season, episode, showId, showType, characterName, characterId } = router.query;
 
-  console.log("episode", episode);
   const [selectedSeason, setSelectedSeason] = useState<number>(season ? +season : 1);
   const [selectedEpisode, setSelectedEpisode] = useState<number | undefined>(episode ? +episode : 1);
   const [selectedCharacter, setSelectedCharacter] = useState<IGenericOption | undefined>(
@@ -167,9 +168,6 @@ const ShowPageA = (): JSX.Element => {
         season: selectedSeason,
         episode: selectedEpisode,
         ...(selectedCharacter && { characters: [selectedCharacter.value] }),
-        // season: 1,
-        // episode: 1,
-        // ...(selectedCharacter && { characters: [selectedCharacter.value] }),
       },
     },
   });
