@@ -3,7 +3,6 @@ import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../lib/apolloClient";
 
 import "../styles/index.css";
-import "react-mde/lib/styles/css/react-mde-all.css";
 import { Layout } from "@/components/Layout";
 import { Header } from "@/components/Header";
 
