@@ -21,7 +21,8 @@ export default ShowPage;
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [
-      { params: { showId: "5e779b7e5da3d982f7515c01", showType: "series", season: "1", episode: "1" } }, // See the "paths" section below
+      // { params: { slug: ["5ff0590c534371684587798a", "series", "s", "1", "e", "1"] } },
+      // { params: { showId: "5e779b7e5da3d982f7515c01", showType: "series", season: "1", episode: "1" } }, // See the "paths" section below
     ],
     fallback: "blocking",
   };
@@ -55,7 +56,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext) => {
   const apolloClient = initializeApollo();
 
-  const { showId, season, episode } = ObjectMaybe(ctx.params);
+  const { slug } = ObjectMaybe(ctx.params);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showId, showType, season, episode] = slug.split("-");
 
   const showDetailPromise = apolloClient.query({
     query: SHOW_DETAIL_QUERY,

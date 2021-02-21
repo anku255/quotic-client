@@ -9,8 +9,11 @@ interface ShowCardProps {
   year: number;
 }
 
+const getShowPageURL = (showType: "SERIES" | "MOVIE", showId: string) =>
+  showType === "MOVIE" ? `${showId}-${showType.toLowerCase()}` : `${showId}-${showType.toLowerCase()}-1-1`;
+
 export const ShowCard = ({ id, coverPicture, name, year, showType }: ShowCardProps): JSX.Element => (
-  <Link href={`/show/[showId]/[showType]`} as={`/show/${id}/${showType.toLowerCase()}`} shallow>
+  <Link href={`/show/[slug]`} as={`show/${getShowPageURL(showType, id)}`} shallow>
     <a className="block">
       <div className="w-full h-full bg-zircon">
         <div className="w-full relative image">

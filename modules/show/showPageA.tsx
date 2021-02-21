@@ -9,11 +9,11 @@ import { nullableNumber } from "@/types/index";
 import { SEARCH_CHARACTERS_QUERY } from "@/graphql/queries/characters.queries";
 import { ApolloClient } from "@apollo/client";
 import { stringifyQueryParams } from "@/utils/commonHelpers";
+import { ParsedUrlQuery } from "querystring";
 
 interface ShowWithQuoteCount extends Show {
   quotesCount?: nullableNumber;
 }
-
 interface IGenericOption {
   label: string;
   value: string;
@@ -23,13 +23,20 @@ interface ICharacterOption extends IGenericOption {
   coverPicture?: string;
 }
 
+interface ShowPageQueryParams {
+  characterName?: string;
+  characterId?: string;
+  slug?: string;
+}
+
 async function fetchCharacters(
   client: ApolloClient<Record<string, unknown>>,
-  query: string
+  query: string,
+  showId: string
 ): Promise<ICharacterOption[]> {
   const res = await client.query({
     query: SEARCH_CHARACTERS_QUERY,
-    variables: { characterName: query, limit: 10 },
+    variables: { characterName: query, limit: 10, showId },
   });
   const characters = res.data?.searchCharacters ?? [];
   return characters.map((c: any) => ({
@@ -120,6 +127,19 @@ const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
 //   );
 // };
 
+type SlugParams = Omit<ShowPageQueryParams, "slug"> & {
+  showId?: string;
+  showType?: string;
+  season?: string;
+  episode?: string;
+};
+
+function getAllParsedQueryParams(queryParams: ParsedUrlQuery): SlugParams {
+  const { characterName, characterId, slug = "" } = queryParams as ShowPageQueryParams;
+  const [showId, showType, season, episode] = slug.split("-");
+  return { showId, showType, season, episode, characterName, characterId };
+}
+
 /**
  *
  * @param labelPrefix Season | Episode
@@ -137,11 +157,15 @@ const getOptions = (labelPrefix: string, count: number) =>
  * Updates the URL with the given query params
  */
 const updateUrl = (router: NextRouter, queryParams: { [key: string]: string }): void => {
-  const { showId, showType } = router.query;
-  const { season, episode, ...restOfQP } = queryParams;
+  const parsedQueryParams = getAllParsedQueryParams(router.query);
+  const updatedQueryParams = { ...parsedQueryParams, ...queryParams };
+  const { showId, showType } = updatedQueryParams;
+  const { season = 1, episode = 1, ...urlQueryParams } = queryParams;
+  const slug = [showId, showType, season, episode].filter(Boolean).join("-");
+
   router.replace(
-    `/show/[showId]/[showType]/s/[season]/e/[episode]${stringifyQueryParams(restOfQP)}`,
-    `/show/${showId}/${showType}/s/${season}/e/${episode}${stringifyQueryParams(restOfQP)}`,
+    `/show/[slug]${stringifyQueryParams(urlQueryParams)}`,
+    `/show/${slug}${stringifyQueryParams(urlQueryParams)}`,
     { shallow: true }
   );
 };
@@ -150,15 +174,9 @@ const arrayOfLengthFive = new Array(5).fill(0).map((_, i) => i);
 
 const ShowPageA = (): JSX.Element => {
   const router = useRouter();
-  const client = useApolloClient();
 
-  const { season, episode, showId, showType, characterName, characterId } = router.query;
-
-  const [selectedSeason, setSelectedSeason] = useState<number>(season ? +season : 1);
-  const [selectedEpisode, setSelectedEpisode] = useState<number | undefined>(episode ? +episode : 1);
-  const [selectedCharacter, setSelectedCharacter] = useState<IGenericOption | undefined>(
-    characterName && characterId ? { label: characterName as string, value: characterId as string } : undefined
-  );
+  const { characterId, showId, showType, season, episode } = getAllParsedQueryParams(router.query);
+  const isSeries = showType === "series";
 
   const { data: showPageData, loading, error } = useShowDetailsQuery({
     variables: {
@@ -171,9 +189,9 @@ const ShowPageA = (): JSX.Element => {
     variables: {
       filter: {
         show: showId,
-        season: selectedSeason,
-        episode: selectedEpisode,
-        ...(selectedCharacter && { characters: [selectedCharacter.value] }),
+        season: isSeries ? +(season || "1") : undefined,
+        episode: isSeries ? +(episode || "1") : undefined,
+        ...(characterId && { characters: [characterId] }),
       },
     },
   });
@@ -200,72 +218,9 @@ const ShowPageA = (): JSX.Element => {
     <div className="px-4 lg:px-37 lg:pb-8">
       <ShowDetail show={show} />
       <div className="h-8"></div>
-      {/* TODO: Filters */}
       <div className="lg:max-w-700-px">
-        <div className="flex justify-between">
-          <div className="flex-1 pr-4">
-            <SelectField
-              label="Season"
-              options={getOptions("Season", show?.episodes?.length ?? 1)}
-              placeholder="Season"
-              value={{ label: `Season ${selectedSeason}`, value: `${selectedSeason}` }}
-              onChange={(option) => {
-                const nextSeason = +option.value;
-                if (selectedSeason !== nextSeason) {
-                  updateUrl(router, { season: nextSeason.toString() });
-                  setSelectedSeason(nextSeason);
-                }
-              }}
-            />
-          </div>
-          <div className="flex-1 pr-4">
-            <SelectField
-              label="Episode"
-              options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
-              placeholder="Episode"
-              isClearable
-              value={selectedEpisode ? { label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` } : undefined}
-              onChange={(option) => {
-                if (!option) {
-                  updateUrl(router, { season: selectedSeason.toString() });
-                  setSelectedEpisode(undefined);
-                } else {
-                  const nextEpisode = +option.value;
-                  if (selectedEpisode !== nextEpisode) {
-                    updateUrl(router, { season: selectedSeason.toString(), episode: nextEpisode.toString() });
-                    setSelectedEpisode(nextEpisode);
-                  }
-                }
-              }}
-            />
-          </div>
-          <div className="flex-1">
-            <AsyncSelectField
-              label="Character"
-              fetchOptions={({ query }) => fetchCharacters(client as any, query)}
-              value={selectedCharacter}
-              placeholder="Character"
-              isClearable
-              onChange={(option: ICharacterOption | undefined) => {
-                if (!option) {
-                  updateUrl(router, {
-                    season: selectedSeason.toString(),
-                    ...(selectedEpisode && { episode: selectedEpisode.toString() }),
-                  });
-                  setSelectedCharacter(undefined);
-                } else {
-                  updateUrl(router, {
-                    season: selectedSeason.toString(),
-                    ...(selectedEpisode && { episode: selectedEpisode.toString() }),
-                    characterName: option.label,
-                    characterId: option.value,
-                  });
-                  setSelectedCharacter(option);
-                }
-              }}
-            />
-          </div>
-        </div>
+        {/* TODO: Filters */}
+        <QuotesFilter router={router} show={show} />
         <div className="h-8"></div>
         <If
           condition={quoteManyLoading}
@@ -294,3 +249,91 @@ const ShowPageA = (): JSX.Element => {
 };
 
 export default ShowPageA;
+
+function QuotesFilter({ router, show }: { router: NextRouter; show: ShowWithQuoteCount }) {
+  const client = useApolloClient();
+  const { characterName, characterId, showType, showId, season, episode } = getAllParsedQueryParams(router.query);
+  const isSeries = showType === "series";
+
+  const [selectedSeason, setSelectedSeason] = useState<number>(season ? +season : 1);
+  const [selectedEpisode, setSelectedEpisode] = useState<number | undefined>(episode ? +episode : 1);
+  const [selectedCharacter, setSelectedCharacter] = useState<IGenericOption | undefined>(
+    characterName && characterId ? { label: characterName as string, value: characterId as string } : undefined
+  );
+
+  return (
+    <div className="flex justify-between">
+      <If
+        condition={isSeries}
+        then={
+          <>
+            <div className="flex-1 pr-4">
+              <SelectField
+                label="Season"
+                options={getOptions("Season", show?.episodes?.length ?? 1)}
+                placeholder="Season"
+                value={{ label: `Season ${selectedSeason}`, value: `${selectedSeason}` }}
+                onChange={(option) => {
+                  const nextSeason = +option.value;
+                  if (selectedSeason !== nextSeason) {
+                    updateUrl(router, { season: nextSeason.toString() });
+                    setSelectedSeason(nextSeason);
+                  }
+                }}
+              />
+            </div>
+            <div className="flex-1 pr-4">
+              <SelectField
+                label="Episode"
+                options={getOptions("Episode", show?.episodes?.[selectedSeason - 1]?.episodes ?? 1)}
+                placeholder="Episode"
+                isClearable
+                value={
+                  selectedEpisode ? { label: `Episode ${selectedEpisode}`, value: `${selectedEpisode}` } : undefined
+                }
+                onChange={(option) => {
+                  if (!option) {
+                    updateUrl(router, { season: selectedSeason.toString() });
+                    setSelectedEpisode(undefined);
+                  } else {
+                    const nextEpisode = +option.value;
+                    if (selectedEpisode !== nextEpisode) {
+                      updateUrl(router, { season: selectedSeason.toString(), episode: nextEpisode.toString() });
+                      setSelectedEpisode(nextEpisode);
+                    }
+                  }
+                }}
+              />
+            </div>
+          </>
+        }
+      />
+      <div className="flex-1 md:max-w-xs">
+        <AsyncSelectField
+          label="Character"
+          fetchOptions={({ query }) => fetchCharacters(client as any, query, showId as string)}
+          value={selectedCharacter}
+          placeholder="Character"
+          isClearable
+          onChange={(option: ICharacterOption | undefined) => {
+            if (!option) {
+              updateUrl(router, {
+                season: selectedSeason.toString(),
+                ...(selectedEpisode && { episode: selectedEpisode.toString() }),
+              });
+              setSelectedCharacter(undefined);
+            } else {
+              updateUrl(router, {
+                season: selectedSeason.toString(),
+                ...(selectedEpisode && { episode: selectedEpisode.toString() }),
+                characterName: option.label,
+                characterId: option.value,
+              });
+              setSelectedCharacter(option);
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}

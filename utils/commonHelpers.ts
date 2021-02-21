@@ -15,6 +15,10 @@ export const isNotEmptyObject = (obj: any) =>
 export const removeNonTrueValuesFromObject = (obj: any) => filter(Boolean, obj);
 
 export const stringifyQueryParams = (qp: { [key: string]: string }, url = "") => {
-  if (!isNotEmptyObject(qp)) return "";
-  return url.includes("?") ? `&${queryString.stringify(qp)}` : `?${queryString.stringify(qp)}`;
+  const truthyQueryParams = removeNonTrueValuesFromObject(qp);
+  if (!isNotEmptyObject(truthyQueryParams)) return "";
+
+  return url.includes("?")
+    ? `&${queryString.stringify(truthyQueryParams)}`
+    : `?${queryString.stringify(truthyQueryParams)}`;
 };
