@@ -15,7 +15,9 @@ export default IndexPage;
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const apolloClient = initializeApollo();
 
+  console.log("getServerSideProps: called");
   if (isServerReq(req)) {
+    console.log("getServerSideProps: fetching data");
     await apolloClient.query({
       query: HOME_PAGE_QUERY,
       variables: {
