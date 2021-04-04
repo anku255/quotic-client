@@ -2,6 +2,7 @@ import { If } from "@/components/If";
 import { isNotEmptyArray } from "@/utils/commonHelpers";
 import Link from "next/link";
 import React from "react";
+import { Image } from "@/components/Image";
 
 interface TrendingQuoteCardProps {
   quoteId: string;
@@ -50,7 +51,15 @@ export const TrendingQuoteCard = ({
           <div className="flex-shrink-0 w-16">
             <If
               condition={!!coverPicture}
-              then={<img className="rounded-l-full w-full h-full object-cover" src={coverPicture} alt="" />}
+              then={
+                <Image
+                  url={coverPicture}
+                  width="150"
+                  crop="scale"
+                  className="rounded-l-full w-full h-full object-cover"
+                  alt=""
+                />
+              }
             />
           </div>
         </div>

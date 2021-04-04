@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { Image } from "@/components/Image";
 
 interface ShowCardProps {
   id: string;
@@ -17,9 +18,11 @@ export const ShowCard = ({ id, coverPicture, name, year, showType }: ShowCardPro
     <a className="block">
       <div className="w-full h-full bg-zircon">
         <div className="w-full relative image">
-          <img
+          <Image
             className="absolute w-full h-full rounded-lg object-cover"
-            src={coverPicture}
+            url={coverPicture}
+            crop="scale"
+            height="200"
             alt={name}
             style={{ boxShadow: "0px 30px 40px -25px rgba(0, 0, 0, 0.75)" }}
           />

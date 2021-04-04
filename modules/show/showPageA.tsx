@@ -10,6 +10,7 @@ import { SEARCH_CHARACTERS_QUERY } from "@/graphql/queries/characters.queries";
 import { ApolloClient } from "@apollo/client";
 import { stringifyQueryParams } from "@/utils/commonHelpers";
 import { ParsedUrlQuery } from "querystring";
+import { Image } from "@/components/Image";
 
 interface ShowWithQuoteCount extends Show {
   quotesCount?: nullableNumber;
@@ -63,7 +64,13 @@ const ShowDetail = ({ show }: { show: ShowWithQuoteCount }) => (
     <div className="flex">
       {/* Image */}
       <div className="pr-4 flex-shrink-0 w-32 h-42">
-        <img className="h-full object-cover rounded-lg shadow-primary" src={show.coverPicture!} alt="" />
+        <Image
+          className="h-full object-cover rounded-lg shadow-primary"
+          crop="scale"
+          height="200"
+          url={show.coverPicture!}
+          alt=""
+        />
       </div>
       {/* Description */}
       <p className="flex-1 text-md font-serif clamp-7 overflow-hidden">{show.description}</p>

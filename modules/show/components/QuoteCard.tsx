@@ -2,6 +2,7 @@ import React from "react";
 import ContentLoader from "react-content-loader";
 import Link from "next/link";
 import { nullableString, nullableNumber } from "../../../types";
+import { Image } from "@/components/Image";
 
 interface QuoteCardProps {
   id: string;
@@ -60,7 +61,13 @@ export const QuoteCard = ({
                 <div className="w-4 flex-shrink-0"></div>
                 {/* Image */}
                 <div className="-mt-3 flex-shrink-0 w-20">
-                  <img className="rounded-l-full w-full h-full object-cover" src={imageUrl!} alt="" />
+                  <Image
+                    className="rounded-l-full w-full h-full object-cover"
+                    height="150"
+                    crop="scale"
+                    url={imageUrl!}
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
