@@ -1,6 +1,7 @@
 import React from "react";
 import { nullableString, nullableNumber } from "../types";
 import { HeaderWithBackButton } from "./HeaderWithBackButton";
+import { If } from "./If";
 import { Heading } from "./Typography";
 
 interface QuoteDetailProps {
@@ -52,10 +53,15 @@ export const QuoteDetail = ({
         <div className="text-center lg:text-left">
           <div className="text-2xl  font-semibold">{showName}</div>
           <div className="flex justify-center  font-serif text-sm text-radicalRed lg:justify-start lg:mt-2">
-            <span className="">{showYear} &middot;&nbsp;</span>
-            <span className="">
-              E{episode} S{season}
-            </span>
+            <span className="">{showYear}</span>
+            <If
+              condition={Boolean(episode && season)}
+              then={
+                <span>
+                  &middot;&nbsp; E{episode} S{season}
+                </span>
+              }
+            />
             {/* <span className="">23:45 min</span> */}
           </div>
         </div>

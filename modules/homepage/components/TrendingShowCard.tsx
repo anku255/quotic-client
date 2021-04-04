@@ -26,7 +26,7 @@ export const TrendingQuoteCard = ({
   coverPicture,
 }: TrendingQuoteCardProps): JSX.Element => (
   <Link href={`/quote/[quoteId]`} as={`/quote/${quoteId}`} shallow>
-    <a className="block">
+    <a className="block w-full">
       <div className="w-full h-full p-4 pr-0 border border-aliceBlue bg-white shadow-primary rounded-lg">
         <div className="flex">
           {/* Left */}
