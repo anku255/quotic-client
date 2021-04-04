@@ -14,6 +14,7 @@ export const HomePage: React.FunctionComponent = () => {
       quotesLimit: 5,
       showsLimit: 5,
     },
+    nextFetchPolicy: "cache-first",
   });
 
   if (loading) return <p>Loading...</p>;
