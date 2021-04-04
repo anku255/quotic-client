@@ -26,7 +26,7 @@ export const TrendingQuoteCard = ({
 }: TrendingQuoteCardProps): JSX.Element => (
   <Link href={`/quote/[quoteId]`} as={`/quote/${quoteId}`} shallow>
     <a className="block">
-      <div className="w-full p-4 pr-0 border border-aliceBlue bg-white shadow-primary rounded-lg">
+      <div className="w-full h-full p-4 pr-0 border border-aliceBlue bg-white shadow-primary rounded-lg">
         <div className="flex">
           {/* Left */}
           <div className="flex-1 pr-2">
@@ -48,7 +48,10 @@ export const TrendingQuoteCard = ({
 
           {/* Right */}
           <div className="flex-shrink-0 w-16">
-            <img className="rounded-l-full w-full h-full object-cover" src={coverPicture} alt="" />
+            <If
+              condition={!!coverPicture}
+              then={<img className="rounded-l-full w-full h-full object-cover" src={coverPicture} alt="" />}
+            />
           </div>
         </div>
       </div>
