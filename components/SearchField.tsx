@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useApolloClient } from "@apollo/client";
 import { stripHtml } from "@/utils/strip-html";
 import { SEARCH_QUERY } from "graphql/queries/search.queries";
+import { Image } from "@/components/Image";
 
 interface IBaseSuggestion {
   id: string;
@@ -63,7 +64,14 @@ const SuggestionItem = (suggestion: ISuggestion) => {
     return (
       <SuggestionContainer id={suggestion.id} type={suggestion.type}>
         <div className="w-10 h-12">
-          <img className="w-full h-full object-cover rounded" src={suggestion.imageUrl} alt="" />
+          <Image
+            className="w-full h-full object-cover rounded"
+            width="40"
+            height="48"
+            crop="scale"
+            url={suggestion.imageUrl}
+            alt=""
+          />
         </div>
         <div className="pl-3">
           <div className="font-serif">{suggestion.showName}</div>
@@ -77,7 +85,14 @@ const SuggestionItem = (suggestion: ISuggestion) => {
     return (
       <SuggestionContainer id={suggestion.id} type={suggestion.type}>
         <div className="w-10 h-12">
-          <img className="w-full h-full object-cover rounded" src={suggestion.imageUrl} alt="" />
+          <Image
+            className="w-full h-full object-cover rounded"
+            width="40"
+            height="48"
+            crop="scale"
+            url={suggestion.imageUrl}
+            alt=""
+          />
         </div>
         <div className="pl-3">
           <div className="font-serif">{suggestion.characterName}</div>
