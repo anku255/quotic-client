@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const SHOW_DETAIL_QUERY = gql`
-  query showDetails($showId: MongoID!, $quoteCountFilter: FilterCountQuoteInput) {
+  query showDetails($showId: MongoID!, $quoteCountFilter: FilterQuoteInput) {
     showById(_id: $showId) {
       _id
       name
